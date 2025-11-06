@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Bus Driver App</title>
+  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+  <link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Work+Sans:wght@400;500;700;900"
+    onload="this.rel='stylesheet'" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1173d4",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+          },
+          fontFamily: {
+            "display": ["Work Sans"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+<body class="font-display bg-background-light dark:bg-background-dark">
+  <div class="relative flex flex-col h-screen justify-between">
+    <div class="flex-grow overflow-y-auto">
+      <header
+        class="sticky top-0 z-10 flex items-center justify-between p-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+        <button class="text-background-dark dark:text-background-light" onclick="history.back()" title="Atrás">
+          <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <h1 class="text-lg font-bold text-background-dark dark:text-background-light">Calendario</h1>
+        <button class="text-background-dark dark:text-background-light" title="Notificaciones"
+          onclick="window.location.href='historialNotisConductor.html'">
+          <span class="material-symbols-outlined">notifications</span>
+        </button>
+      </header>
+      <main class="p-4">
+        <div class="max-w-md mx-auto">
+          <div class="mb-6">
+            <div class="flex items-center justify-between mb-2">
+              <button
+                class="p-2 rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">
+                <span class="material-symbols-outlined">chevron_left</span>
+              </button>
+              <h2 class="text-base font-bold text-background-dark dark:text-background-light">Mayo 2024</h2>
+              <button
+                class="p-2 rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">
+                <span class="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+            <div
+              class="grid grid-cols-7 gap-1 text-center text-xs font-medium text-background-dark/60 dark:text-background-light/60">
+              <div class="py-2">L</div>
+              <div class="py-2">M</div>
+              <div class="py-2">X</div>
+              <div class="py-2">J</div>
+              <div class="py-2">V</div>
+              <div class="py-2">S</div>
+              <div class="py-2">D</div>
+            </div>
+            <div class="grid grid-cols-7 gap-1 text-sm text-center">
+              <div class="text-background-dark/40 dark:text-background-light/40 py-2">29</div>
+              <div class="text-background-dark/40 dark:text-background-light/40 py-2">30</div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">1</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">2</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">3</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">4</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white font-semibold">5</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">6</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">7</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">8</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">9</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">10</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">11</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">12</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">13</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">14</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">15</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">16</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">17</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">18</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">19</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">20</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">21</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">22</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">23</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">24</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">25</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">26</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">27</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">28</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">29</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">30</button>
+              </div>
+              <div class="py-2"><button
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light">31</button>
+              </div>
+            </div>
+          </div>
+          <h3 class="text-lg font-bold mb-3 text-background-dark dark:text-background-light">Viajes Asignados - 5 de
+            Mayo</h3>
+          <div class="space-y-3">
+            <div
+              class="flex items-center gap-4 p-3 rounded-lg bg-background-light dark:bg-background-dark/50 border border-transparent dark:border-background-dark/20">
+              <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary">
+                <span class="material-symbols-outlined">directions_bus</span>
+              </div>
+              <div class="flex-1">
+                <p class="font-semibold text-background-dark dark:text-background-light">Ruta 1: Centro - Aeropuerto</p>
+                <p class="text-sm text-background-dark/70 dark:text-background-light/70">8:00 AM - 10:00 AM</p>
+              </div>
+              <div class="flex items-center gap-2 text-background-dark/60 dark:text-background-light/60">
+                <span class="material-symbols-outlined text-sm">alarm</span>
+                <span class="text-xs font-medium">7:00 AM</span>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-4 p-3 rounded-lg bg-background-light dark:bg-background-dark/50 border border-transparent dark:border-background-dark/20">
+              <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary">
+                <span class="material-symbols-outlined">directions_bus</span>
+              </div>
+              <div class="flex-1">
+                <p class="font-semibold text-background-dark dark:text-background-light">Ruta 2: Aeropuerto - Centro</p>
+                <p class="text-sm text-background-dark/70 dark:text-background-light/70">11:00 AM - 1:00 PM</p>
+              </div>
+              <div class="flex items-center gap-2 text-background-dark/60 dark:text-background-light/60">
+                <span class="material-symbols-outlined text-sm">alarm</span>
+                <span class="text-xs font-medium">10:00 AM</span>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-4 p-3 rounded-lg bg-background-light dark:bg-background-dark/50 border border-transparent dark:border-background-dark/20">
+              <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary">
+                <span class="material-symbols-outlined">directions_bus</span>
+              </div>
+              <div class="flex-1">
+                <p class="font-semibold text-background-dark dark:text-background-light">Ruta 3: Centro - Estación</p>
+                <p class="text-sm text-background-dark/70 dark:text-background-light/70">2:00 PM - 4:00 PM</p>
+              </div>
+              <div class="flex items-center gap-2 text-background-dark/60 dark:text-background-light/60">
+                <span class="material-symbols-outlined text-sm">alarm</span>
+                <span class="text-xs font-medium">1:00 PM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <footer
+      class="sticky bottom-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-t border-background-dark/10 dark:border-background-light/10">
+      <nav class="flex justify-around p-2">
+        <a class="flex flex-col items-center gap-1 p-2 rounded-lg text-primary" href="aplicacionConductor.html">
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">calendar_month</span>
+          <span class="text-xs font-medium">Calendario</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 p-2 rounded-lg text-background-dark/60 dark:text-background-light/60 hover:text-primary dark:hover:text-primary"
+          href="reporteIncidenciaConductor.html">
+          <span class="material-symbols-outlined">report</span>
+          <span class="text-xs font-medium">Incidencias</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 p-2 rounded-lg text-background-dark/60 dark:text-background-light/60 hover:text-primary dark:hover:text-primary"
+          href="aplicacionConductor2.html">
+          <span class="material-symbols-outlined">person</span>
+          <span class="text-xs font-medium">Perfil</span>
+        </a>
+      </nav>
+    </footer>
+  </div>
+  <script>
+      (function guard() {
+        const role = localStorage.getItem('role');
+        if (role !== 'conductor' && role !== 'driver') { window.location.href = 'inicioSesion.html'; return; }
+      })();
+
+    // ===== Calendario dinámico + viajes asignados =====
+    (function driverCalendar() {
+      const LS_TRIPS = 'viajes_discrecionales_v1';
+      const driverId = localStorage.getItem('driverId') || 'drv-1';
+
+      const monthLabel = document.querySelector('main .max-w-md h2');
+      const grid = document.querySelector('main .max-w-md .grid.grid-cols-7.text-sm');
+      const list = document.querySelector('main .max-w-md .space-y-3');
+
+      if (!monthLabel || !grid || !list) return;
+
+      let cur = new Date();
+      cur.setDate(1);
+
+      function loadTrips() { try { return JSON.parse(localStorage.getItem(LS_TRIPS) || '[]'); } catch { return []; } }
+
+      function renderMonth() {
+        const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        monthLabel.textContent = `${monthNames[cur.getMonth()]} ${cur.getFullYear()}`;
+
+        const firstDay = new Date(cur.getFullYear(), cur.getMonth(), 1);
+        const startWeekDay = (firstDay.getDay() + 6) % 7; // L=0..D=6
+        const daysInMonth = new Date(cur.getFullYear(), cur.getMonth() + 1, 0).getDate();
+
+        grid.innerHTML = '';
+        for (let i = 0; i < startWeekDay; i++) {
+          const d = document.createElement('div'); d.className = 'text-background-dark/40 dark:text-background-light/40 py-2'; d.textContent = ''; grid.appendChild(d);
+        }
+        for (let day = 1; day <= daysInMonth; day++) {
+          const btn = document.createElement('button');
+          btn.className = 'w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-background-dark dark:text-background-light';
+          btn.textContent = day;
+          const cell = document.createElement('div'); cell.className = 'py-2'; cell.appendChild(btn); grid.appendChild(cell);
+          btn.onclick = () => renderDay(day);
+        }
+        renderDay(new Date().getMonth() === cur.getMonth() ? new Date().getDate() : 1);
+      }
+
+      function renderDay(day) {
+        const yyyy = cur.getFullYear();
+        const mm = cur.getMonth();
+        const trips = loadTrips().filter(t => t.driverId === driverId);
+        const items = trips.filter(t => {
+          const sd = new Date(t.start);
+          return sd.getFullYear() === yyyy && sd.getMonth() === mm && sd.getDate() === day;
+        }).sort((a, b) => new Date(a.start) - new Date(b.start));
+
+        list.innerHTML = '';
+        if (!items.length) {
+          const empty = document.createElement('div');
+          empty.className = 'p-3 rounded-lg bg-background-light dark:bg-background-dark/50 border border-dashed border-background-dark/20 text-center text-sm text-background-dark/60 dark:text-background-light/60';
+          empty.textContent = 'Sin viajes asignados este día';
+          list.appendChild(empty);
+          return;
+        }
+        items.forEach(t => {
+          const when = new Date(t.start);
+          const to = new Date(t.end);
+          const card = document.createElement('div');
+          card.className = 'flex items-center gap-4 p-3 rounded-lg bg-background-light dark:bg-background-dark/50 border border-transparent dark:border-background-dark/20';
+          card.innerHTML = `
+         <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary">
+           <span class="material-symbols-outlined">directions_bus</span>
+         </div>
+         <div class="flex-1">
+           <p class="font-semibold text-background-dark dark:text-background-light">${t.origen} → ${t.destino}</p>
+           <p class="text-sm text-background-dark/70 dark:text-background-light/70">${when.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} - ${to.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</p>
+         </div>
+         <div class="flex items-center gap-2 text-background-dark/60 dark:text-background-light/60">
+           <span class="material-symbols-outlined text-sm">alarm</span>
+           <span class="text-xs font-medium">${new Date(when.getTime() - 60 * 60000).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</span>
+         </div>`;
+          list.appendChild(card);
+        });
+      }
+
+      // Wire prev/next arrows if present
+      const headerBtns = document.querySelectorAll('main .max-w-md .flex.items-center.justify-between button');
+      if (headerBtns.length >= 2) {
+        headerBtns[0].onclick = () => { cur.setMonth(cur.getMonth() - 1); renderMonth(); };
+        headerBtns[1].onclick = () => { cur.setMonth(cur.getMonth() + 1); renderMonth(); };
+      }
+
+      renderMonth();
+      window.addEventListener('storage', (e) => { if (e.key === 'viajes_discrecionales_v1') renderMonth(); });
+    })();
+  </script>
+
+</body>
+
+</html>
