@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Conductores Suplentes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1173d4",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<button class="text-slate-900 dark:text-white flex size-12 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Conductores Suplentes</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 w-12 bg-transparent text-slate-900 dark:text-white">
+<span class="material-symbols-outlined">refresh</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-3 p-4">
+<div class="flex gap-6 justify-between"><p class="text-slate-900 dark:text-white text-base font-medium leading-normal">Suplentes disponibles: 15/20 (75%)</p></div>
+<div class="rounded-full bg-slate-200 dark:bg-slate-700 h-2.5">
+<div class="h-2.5 rounded-full bg-primary" style="width: 75%;"></div>
+</div>
+</div>
+<div class="flex gap-3 p-4 overflow-x-auto">
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/20 dark:bg-primary/30 px-4">
+<p class="text-primary dark:text-white text-sm font-medium leading-normal">Disponibilidad</p>
+<span class="material-symbols-outlined text-primary dark:text-white">expand_more</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-200 dark:bg-slate-700 px-4">
+<p class="text-slate-900 dark:text-white text-sm font-medium leading-normal">Licencia</p>
+<span class="material-symbols-outlined text-slate-900 dark:text-white">expand_more</span>
+</button>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[88px] py-2 justify-between border-b border-slate-200 dark:border-slate-700">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar de Juan Pérez" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBgTo2-u7pqjzZr3yziXgNsjMrUGylpP2YG1fwMJLEkmyrycKM6y5WqxYnTPdJY_rERxDGQHbsGQHlajvfwte2q0qfy6AyZDZrJk8Z7spkhioC4y4ix_VYAF9ek8B6mKswjHkkAQnSlB4J7fuPgGymHPIhh9JsUIcYbf3RIBvnKc3RlysYHKs_XRtml89XbNT0nlpbze5017xAwUkUB4Au88TuVbzsuG99VC74dnCzbyYRlgT5X-Asbyq2KonkGwYWF9KtZw3hRnQ");'></div>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-background-light dark:border-background-dark"></div>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-base font-medium leading-normal line-clamp-1">Juan Pérez</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">Disponible - Cerca de la estación central</p>
+</div>
+</div>
+<div class="shrink-0 flex gap-2">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white text-sm font-medium leading-normal w-fit">
+<span class="truncate">Llamar</span>
+</button>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-medium leading-normal w-fit">
+<span class="truncate">Asignar</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[88px] py-2 justify-between border-b border-slate-200 dark:border-slate-700">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar de Ana Gómez" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBsV2Sz4bAP0KiYa6lYD83UdH_6vgsY7yluVCYHyUnrmcC_PND9klXHM9bWlE1IaM6k4XeozKSwZr8qaqwUCuJ9ceaq4G1_CYdWh5oFqMpyrw8JlPxgjDudZYWgY0F9HMvN_1U3WvxX4aslnw4QLIjxeHBC1dHVqtlzMrOvrZxcCMd_SIOlq2dZmnLgoSDBGrZgyQonUWjOAGS2iWKzHVHi2xrQF9yDRzcIYPXgPTwm2h-0Rcv4VIrLJ2Y85wCY_XCPCxbWAp8HXg");'></div>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-yellow-500 rounded-full border-2 border-background-light dark:border-background-dark"></div>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-base font-medium leading-normal line-clamp-1">Ana Gómez</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">En descanso - Zona norte</p>
+</div>
+</div>
+<div class="shrink-0 flex gap-2">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white text-sm font-medium leading-normal w-fit">
+<span class="truncate">Llamar</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[88px] py-2 justify-between border-b border-slate-200 dark:border-slate-700">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar de Carlos Ruiz" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCCnKZllmUzIjFBemYIEIhOCWKVI7ZHmQRDslDYXjN64QS8x9KTfnVAm_OuAI_5l-OygAiQpBsc3jwp-Gt09PMtyZKUfj-dypO7uW02ycUhc1BHoJE1f9B5JKecZ1XJftqyQx11jCvKJcbcozvlR92rTokUeTH_jJfp9GfTxqZ4bvOzIWvb0Z0At7Rvvm_ObcYPHO2zap4td8n5fk6fWl8Bjl4Y4IH3ukmi0nsOOhBDoXSt0Fry1JkaBH4R1m4eQJrMRcUIGsGmdw");'></div>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 rounded-full border-2 border-background-light dark:border-background-dark"></div>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-base font-medium leading-normal line-clamp-1">Carlos Ruiz</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">De camino a suplir - A 15 min de la base</p>
+</div>
+</div>
+<div class="shrink-0 flex gap-2">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white text-sm font-medium leading-normal w-fit">
+<span class="truncate">Llamar</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[88px] py-2 justify-between border-b border-slate-200 dark:border-slate-700">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar de Laura Fernandez" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuADttAJI-c7zkrcEqjncS_6WHArBLkjxtRLGD5_MwIg9KUo5LWUtl3rCHEPBr_jCU7Gprac41_V7dQvMGxgJIu8tKBMCcActXVYESGv8CU8JgWblzWi-XjDXbWRVq9AKKp2KqlafXYnJ2wn-DUfUVIlU7hkw6Gy9SUwZfFZn7gHaXfUrK7fBbi9_bwubFEgzU3GxtznmKjjh2Ogxk7Eo51LABqKujAKlKvigKZvl0OkpjBopAvwstU2_HCGY4YwvUqPozhwXsL2lg");'></div>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-background-light dark:border-background-dark"></div>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-base font-medium leading-normal line-clamp-1">Laura Fernandez</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">Disponible - Zona sur</p>
+</div>
+</div>
+<div class="shrink-0 flex gap-2">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white text-sm font-medium leading-normal w-fit">
+<span class="truncate">Llamar</span>
+</button>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-medium leading-normal w-fit">
+<span class="truncate">Asignar</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[88px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar de Miguel Torres" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBxeiSP7vky7oIjf47LU7uKJJKBcmEW_RIEODZVHf4uEuv0DOy-nqDmguMbgKMWAiykOv2IZrJEH6rgvkgc7NK0tT4DC5otb_mHSjVhJjhYxywtOHmAuCFq56kk3EcN0L7C6ysfsuUeM3m8px5t4ArQgyyRC-x4TYzwIcl-aeiyHzMwzrQWItWa-DOrYeLe2wCFz-sxs7sa1kOHmlaKHmEyhv79e0sKLIqLNPcYscbfCIYDWTbvhR5_xt827gpf0R71-2w0eEW_sQ");'></div>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-background-light dark:border-background-dark"></div>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-base font-medium leading-normal line-clamp-1">Miguel Torres</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">No disponible - Incidencia</p>
+</div>
+</div>
+<div class="shrink-0 flex gap-2">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white text-sm font-medium leading-normal w-fit">
+<span class="truncate">Llamar</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>
+
