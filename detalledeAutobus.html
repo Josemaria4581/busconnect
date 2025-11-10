@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1173d4",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "text-light": "#1f2937",
+                        "text-dark": "#e5e7eb",
+                        "text-secondary-light": "#6b7280",
+                        "text-secondary-dark": "#9ca3af",
+                        "border-light": "#e5e7eb",
+                        "border-dark": "#374151"
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col justify-between group/design-root overflow-x-hidden">
+<div>
+<header class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center p-4">
+<button class="text-text-light dark:text-text-dark">
+<span class="material-symbols-outlined">
+                            arrow_back
+                        </span>
+</button>
+<h1 class="flex-1 text-center text-lg font-bold text-text-light dark:text-text-dark tracking-tight pr-8">Autobús 123</h1>
+</div>
+<div class="border-b border-border-light dark:border-border-dark px-4 overflow-x-auto whitespace-nowrap">
+<nav class="flex space-x-6 -mb-px">
+<a class="inline-flex items-center px-1 py-3 border-b-2 border-primary text-primary text-sm font-bold" href="#">
+                            Información
+                        </a>
+<a class="inline-flex items-center px-1 py-3 border-b-2 border-transparent text-text-secondary-light dark:text-text-secondary-dark hover:text-text-light dark:hover:text-text-dark hover:border-border-light dark:hover:border-border-dark text-sm font-medium" href="#">
+                            Mantenimiento
+                        </a>
+<a class="inline-flex items-center px-1 py-3 border-b-2 border-transparent text-text-secondary-light dark:text-text-secondary-dark hover:text-text-light dark:hover:text-text-dark hover:border-border-light dark:hover:border-border-dark text-sm font-medium" href="#">
+                            Documentos
+                        </a>
+<a class="inline-flex items-center px-1 py-3 border-b-2 border-transparent text-text-secondary-light dark:text-text-secondary-dark hover:text-text-light dark:hover:text-text-dark hover:border-border-light dark:hover:border-border-dark text-sm font-medium" href="#">
+                            Incidencias
+                        </a>
+</nav>
+</div>
+</header>
+<main class="p-4">
+<section class="mb-6">
+<h2 class="text-xl font-bold text-text-light dark:text-text-dark mb-3">Detalles del vehículo</h2>
+<div class="grid grid-cols-2 gap-x-4 border-t border-border-light dark:border-border-dark">
+<div class="py-4 border-b border-border-light dark:border-border-dark">
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Modelo</p>
+<p class="text-base font-medium text-text-light dark:text-text-dark">Tourismo</p>
+</div>
+<div class="py-4 border-b border-border-light dark:border-border-dark">
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Marca</p>
+<p class="text-base font-medium text-text-light dark:text-text-dark">Mercedes-Benz</p>
+</div>
+<div class="py-4 border-b border-border-light dark:border-border-dark">
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Año</p>
+<p class="text-base font-medium text-text-light dark:text-text-dark">2018</p>
+</div>
+<div class="py-4 border-b border-border-light dark:border-border-dark">
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Matrícula</p>
+<p class="text-base font-medium text-text-light dark:text-text-dark">XYZ 456</p>
+</div>
+<div class="py-4 border-b border-border-light dark:border-border-dark">
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Tipo</p>
+<p class="text-base font-medium text-text-light dark:text-text-dark">Autobús</p>
+</div>
+<div class="py-4 border-b border-border-light dark:border-border-dark">
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Capacidad</p>
+<p class="text-base font-medium text-text-light dark:text-text-dark">55</p>
+</div>
+</div>
+</section>
+<section>
+<h2 class="text-xl font-bold text-text-light dark:text-text-dark mb-3">Estado actual</h2>
+<div class="grid grid-cols-2 gap-x-4 border-t border-border-light dark:border-border-dark">
+<div class="py-4 border-b border-border-light dark:border-border-dark">
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Kilometraje</p>
+<p class="text-base font-medium text-text-light dark:text-text-dark">150,000 km</p>
+</div>
+<div class="py-4 border-b border-border-light dark:border-border-dark">
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Consumo medio</p>
+<p class="text-base font-medium text-text-light dark:text-text-dark">25 L/100km</p>
+</div>
+<div class="py-4 border-b border-border-light dark:border-border-dark">
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Próxima ITV</p>
+<p class="text-base font-medium text-text-light dark:text-text-dark">15/08/2024</p>
+</div>
+<div class="py-4 border-b border-border-light dark:border-border-dark">
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Seguro</p>
+<p class="text-base font-medium text-text-light dark:text-text-dark">Vigente</p>
+</div>
+</div>
+</section>
+</main>
+</div>
+<footer class="sticky bottom-0 bg-background-light dark:bg-background-dark p-4 border-t border-border-light dark:border-border-dark">
+<button class="w-full flex items-center justify-center rounded-lg h-12 px-6 bg-primary text-white text-base font-bold hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined mr-2">edit</span>
+<span>Editar información</span>
+</button>
+</footer>
+</div>
+
+</body></html>
+
+
+

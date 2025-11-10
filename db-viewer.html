@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>Visor de Base de Datos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { primary: "#1173d4" },
+                    fontFamily: { display: ["Work Sans", "sans-serif"] }
+                }
+            }
+        };
+    </script>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 font-display text-gray-800 dark:text-gray-200 p-6">
+    <div class="max-w-6xl mx-auto space-y-6">
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold">Base de Datos Local (Storage)</h1>
+            <a href="dashboard.html"
+                class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg text-sm font-bold">
+                Volver al Dashboard
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <!-- Sidebar / List of Collections -->
+            <div class="md:col-span-1 space-y-2">
+                <h2 class="font-bold text-sm text-gray-500 uppercase tracking-wider mb-3">Tablas / Colecciones</h2>
+                <div id="keyList" class="space-y-1"></div>
+
+                <div class="pt-6 border-t border-gray-300 dark:border-gray-700 mt-6">
+                    <button onclick="clearAllData()"
+                        class="w-full text-left px-3 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-sm font-bold">
+                         Borrar todo / Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Viewer -->
+            <div
+                class="md:col-span-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 flex flex-col min-h-[500px]">
+                <div
+                    class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 rounded-t-xl flex justify-between items-center">
+                    <h3 id="currentKeyName" class="font-bold font-mono text-primary">Selecciona una tabla</h3>
+                    <span id="recordCount" class="text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">0
+                        registros</span>
+                </div>
+                <div class="flex-1 p-0 overflow-auto relative">
+                    <pre id="jsonViewer"
+                        class="p-4 text-xs font-mono text-gray-600 dark:text-gray-300 whitespace-pre-wrap">...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const KEYS = [
+            { label: 'Usuarios', key: 'users_db_v1' },
+            { label: 'Flota Autobuses', key: 'flota_autobuses_v1' },
+            { label: 'Empleados', key: 'empleados_v1' },
+            { label: 'Rutas', key: 'rutas_v1' },
+            { label: 'Viajes Discrecionales', key: 'viajes_discrecionales_v1' },
+            { label: 'Incidencias Conductores', key: 'incidencias_conductores_v1' },
+            { label: 'Notificaciones', key: 'notificaciones_v1' }
+        ];
+
+        function renderKeys() {
+            const list = document.getElementById('keyList');
+            list.innerHTML = '';
+            KEYS.forEach(k => {
+                const btn = document.createElement('button');
+                btn.textContent = k.label;
+                btn.className = 'w-full text-left px-4 py-2 rounded-lg text-sm hover:bg-primary/10 transition-colors focus:bg-primary/20 focus:text-primary font-medium';
+                btn.onclick = () => showData(k.key, k.label);
+                list.appendChild(btn);
+            });
+        }
+
+        function showData(key, label) {
+            document.getElementById('currentKeyName').textContent = label + ` (${key})`;
+            const raw = localStorage.getItem(key);
+            if (!raw) {
+                document.getElementById('jsonViewer').textContent = 'null (vacío)';
+                document.getElementById('recordCount').textContent = '0 registros';
+                return;
+            }
+            try {
+                const data = JSON.parse(raw);
+                document.getElementById('recordCount').textContent = (Array.isArray(data) ? data.length : 1) + ' registros';
+                document.getElementById('jsonViewer').textContent = JSON.stringify(data, null, 2);
+            } catch (e) {
+                document.getElementById('jsonViewer').textContent = raw; // Texto plano si falla parse
+                document.getElementById('recordCount').textContent = 'Texto plano';
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('¿Seguro que quieres borrar TODOS los datos y reiniciar?')) {
+                localStorage.clear();
+                alert('Datos borrados. El sistema se reiniciará con datos de ejemplo.');
+                window.location.href = 'inicioSesion.html';
+            }
+        }
+
+        // Init
+        renderKeys();
+        // Auto-select users
+        showData(KEYS[0].key, KEYS[0].label);
+    </script>
+</body>
+
+</html>
