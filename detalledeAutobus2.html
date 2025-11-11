@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#1173d4",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "text-light": "#1f2937",
+                        "text-dark": "#e5e7eb",
+                        "text-secondary-light": "#6b7280",
+                        "text-secondary-dark": "#9ca3af",
+                        "border-light": "#e5e7eb",
+                        "border-dark": "#374151",
+                    },
+                    fontFamily: {
+                        display: ["Work Sans"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px",
+                    },
+                },
+            },
+        };
+    </script>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col justify-between group/design-root overflow-x-hidden">
+<div>
+<header class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center p-4">
+<button class="text-text-light dark:text-text-dark">
+<span class="material-symbols-outlined"> arrow_back </span>
+</button>
+<h1 class="flex-1 text-center text-lg font-bold text-text-light dark:text-text-dark tracking-tight pr-8">
+              Autobús 123
+            </h1>
+</div>
+<div class="border-b border-border-light dark:border-border-dark px-4 overflow-x-auto whitespace-nowrap">
+<nav class="flex space-x-6 -mb-px">
+<a class="inline-flex items-center px-1 py-3 border-b-2 border-transparent text-text-secondary-light dark:text-text-secondary-dark hover:text-text-light dark:hover:text-text-dark hover:border-border-light dark:hover:border-border-dark text-sm font-medium" href="#">
+                  Información
+                </a>
+<a class="inline-flex items-center px-1 py-3 border-b-2 border-transparent text-text-secondary-light dark:text-text-secondary-dark hover:text-text-light dark:hover:text-text-dark hover:border-border-light dark:hover:border-border-dark text-sm font-medium" href="#">
+                  Mantenimiento
+                </a>
+<a class="inline-flex items-center px-1 py-3 border-b-2 border-primary text-primary text-sm font-bold" href="#">
+                  Historial de Rutas
+                </a>
+<a class="inline-flex items-center px-1 py-3 border-b-2 border-transparent text-text-secondary-light dark:text-text-secondary-dark hover:text-text-light dark:hover:text-text-dark hover:border-border-light dark:hover:border-border-dark text-sm font-medium" href="#">
+                  Documentos
+                </a>
+<a class="inline-flex items-center px-1 py-3 border-b-2 border-transparent text-text-secondary-light dark:text-text-secondary-dark hover:text-text-light dark:hover:text-text-dark hover:border-border-light dark:hover:border-border-dark text-sm font-medium" href="#">
+                  Incidencias
+                </a>
+</nav>
+</div>
+</header>
+<main class="p-4 pb-24">
+<section class="mb-6">
+<div class="flex justify-between items-center mb-3">
+<h2 class="text-xl font-bold text-text-light dark:text-text-dark">
+                Historial de Rutas
+              </h2>
+<button class="flex items-center text-primary font-medium text-sm">
+<span class="material-symbols-outlined mr-1 text-lg">
+                  filter_list
+                </span>
+<span>Filtrar</span>
+</button>
+</div>
+<div class="space-y-4">
+<div class="bg-white dark:bg-background-dark/50 rounded-lg p-4 border border-border-light dark:border-border-dark">
+<div class="flex justify-between items-start">
+<h3 class="font-bold text-text-light dark:text-text-dark">
+                    Ruta Madrid - Barcelona
+                  </h3>
+<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">
+                    620 km
+                  </p>
+</div>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark mt-1">
+                  15/05/2024 - 16/05/2024
+                </p>
+</div>
+<div class="bg-white dark:bg-background-dark/50 rounded-lg p-4 border border-border-light dark:border-border-dark">
+<div class="flex justify-between items-start">
+<h3 class="font-bold text-text-light dark:text-text-dark">
+                    Ruta Valencia - Sevilla
+                  </h3>
+<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">
+                    650 km
+                  </p>
+</div>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark mt-1">
+                  10/05/2024 - 11/05/2024
+                </p>
+</div>
+<div class="bg-white dark:bg-background-dark/50 rounded-lg p-4 border border-border-light dark:border-border-dark">
+<div class="flex justify-between items-start">
+<h3 class="font-bold text-text-light dark:text-text-dark">
+                    Ruta Bilbao - Madrid
+                  </h3>
+<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">
+                    400 km
+                  </p>
+</div>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark mt-1">
+                  05/05/2024 - 05/05/2024
+                </p>
+</div>
+<div class="bg-white dark:bg-background-dark/50 rounded-lg p-4 border border-border-light dark:border-border-dark">
+<div class="flex justify-between items-start">
+<h3 class="font-bold text-text-light dark:text-text-dark">
+                    Ruta A Coruña - Lisboa
+                  </h3>
+<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">
+                    610 km
+                  </p>
+</div>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark mt-1">
+                  28/04/2024 - 29/04/2024
+                </p>
+</div>
+</div>
+</section>
+</main>
+</div>
+<footer class="sticky bottom-0 bg-background-light dark:bg-background-dark p-4 border-t border-border-light dark:border-border-dark">
+<button class="w-full flex items-center justify-center rounded-lg h-12 px-6 bg-primary text-white text-base font-bold hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined mr-2"> add </span>
+<span>Añadir nueva ruta</span>
+</button>
+</footer>
+</div>
+
+</body></html>
+
+
