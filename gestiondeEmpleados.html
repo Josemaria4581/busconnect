@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Gestión de Empleados</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1173d4",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+            "content-light": "#1f2937",
+            "content-dark": "#e5e7eb",
+            "subtle-light": "#6b7280",
+            "subtle-dark": "#9ca3af",
+            "border-light": "#e5e7eb",
+            "border-dark": "#374151"
+          },
+          fontFamily: {
+            "display": ["Work Sans", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+</style>
+<script src="api-sync.js"></script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display">
+  <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+    <div class="flex-1 pb-24">
+      <header
+        class="sticky top-0 z-10 flex items-center justify-between bg-background-light/80 px-4 py-3 backdrop-blur-sm dark:bg-background-dark/80 border-b border-border-light dark:border-border-dark">
+        <button id="btnBack" class="text-content-light dark:text-content-dark" title="Volver"
+          onclick="window.location.href='dashboard.html'">
+          <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <h1 class="text-lg font-bold text-content-light dark:text-content-dark">Empleados</h1>
+        <div class="w-8"></div>
+      </header>
+
+      <div class="p-4">
+        <div class="flex gap-3">
+          <div class="relative flex-1">
+            <input id="searchEmp"
+              class="w-full pl-10 pr-4 py-3 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg text-content-light dark:text-content-dark placeholder-subtle-light dark:placeholder-subtle-dark focus:ring-primary focus:border-primary"
+              placeholder="Buscar..." type="text" />
+            <span
+              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-subtle-light dark:text-subtle-dark">search</span>
+          </div>
+          <select id="filterRole"
+            class="w-1/3 py-3 pl-3 pr-8 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg text-content-light dark:text-content-dark focus:ring-primary focus:border-primary">
+            <option value="">Todos</option>
+            <option value="driver">Conductores</option>
+            <option value="mechanic">Mecánicos</option>
+            <option value="admin_staff">Administrativos</option>
+            <option value="cleaner">Limpieza</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex justify-center mb-4">
+        <button id="btnAddEmp"
+          class="px-6 py-2 rounded-full bg-primary text-white hover:bg-primary/90 text-base font-medium shadow-md inline-flex items-center gap-2 transition-transform hover:scale-105">
+          <span class="material-symbols-outlined">person_add</span> Añadir empleado
+        </button>
+      </div>
+
+      <main class="p-0">
+        <div id="empList" class="flex flex-col"></div>
+      </main>
+    </div>
+
+    <footer
+      class="fixed bottom-0 left-0 right-0 border-t bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark">
+      <nav class="flex justify-around p-2">
+        <a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 text-subtle-light dark:text-subtle-dark"
+          href="dashboard.html">
+          <span class="material-symbols-outlined">home</span>
+          <span class="text-xs font-medium">Inicio</span>
+        </a>
+        <a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 text-subtle-light dark:text-subtle-dark"
+          href="gestiondeRutas.html">
+          <span class="material-symbols-outlined">map</span>
+          <span class="text-xs font-medium">Rutas</span>
+        </a>
+        <a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 text-subtle-light dark:text-subtle-dark"
+          href="gestiondeViajesDiscrecionales.html">
+          <span class="material-symbols-outlined">work</span>
+          <span class="text-xs font-medium">Viajes</span>
+        </a>
+        <a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 text-subtle-light dark:text-subtle-dark"
+          href="gestiondeFlota.html">
+          <span class="material-symbols-outlined">directions_bus</span>
+          <span class="text-xs font-medium">Flota</span>
+        </a>
+        <a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 bg-primary/10 text-primary dark:bg-primary/20"
+          href="gestiondeEmpleados.html">
+          <span class="material-symbols-outlined">group</span>
+          <span class="text-xs font-bold">Empleados</span>
+        </a>
+      </nav>
+    </footer>
+
+    <!-- Button moved to top -->
+  </div>
+
+  <script>
+      // Guard de rol: solo admin aquí
+      (function guardByRole() {
+        const role = localStorage.getItem('role');
+        if (role === 'conductor') { window.location.href = 'aplicacionConductor.html'; return; }
+        if (role === 'cliente') { window.location.href = 'gestiondeRutas.html'; return; }
+      })();
+
+  </script>
+  <script src="api-sync.js"></script>
+  <script>
+    // Asegurar DB
+    document.addEventListener('DOMContentLoaded', () => { if (window.SeedDB) SeedDB.ensure(); });
+
+    (function empleadosPage() {
+      const $ = (s) => document.querySelector(s);
+      const listBox = $('#empList');
+      const search = $('#searchEmp');
+      const roleFilter = $('#filterRole');
+
+      function getRoleLabel(r) {
+        const map = {
+          'driver': 'Conductor',
+          'mechanic': 'Mecánico',
+          'admin_staff': 'Administrativo',
+          'cleaner': 'Limpieza',
+          'other': 'Otro',
+          'admin': 'Admin'
+        };
+        return map[r] || r || 'Empleado';
+      }
+
+      /* ------------------ Persistencia API ------------------ */
+      let employees = [];
+
+      async function refreshList() {
+        try {
+          const data = await ApiClient.getDrivers(); // Usamos endpoint de conductores como empleados
+          employees = data.map(d => ({
+            id: d.id,
+            // Mapear campos API a UI
+            name: `${d.nombre} ${d.apellidos}`,
+            role: d.rol || 'driver', // backend field
+            imagen: d.imagen,
+            raw: d
+          }));
+          render();
+        } catch (e) { console.error('Error fetching employees', e); }
+      }
+
+      function render() {
+        if (!listBox) return;
+        const q = (search?.value || '').toLowerCase();
+        const r = roleFilter?.value || '';
+
+        const list = employees
+          .filter(e => {
+            const matchText = !q || (e.name || '').toLowerCase().includes(q) || (e.role || '').toLowerCase().includes(q);
+            const matchRole = !r || (e.role === r);
+            return matchText && matchRole;
+          });
+
+        listBox.innerHTML = '';
+        if (!list.length) {
+          listBox.innerHTML = '<div class="p-4 text-subtle-light dark:text-subtle-dark">No hay empleados encontrados.</div>';
+          return;
+        }
+        list.forEach(e => {
+          const row = document.createElement('div');
+          row.className = 'flex items-center gap-4 px-4 py-3 hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer transition-colors border-b border-border-light dark:border-border-dark last:border-0';
+
+          // Avatar
+          let avatarHtml = `<div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-lg">${(e.name || '?').slice(0, 1)}</div>`;
+          if (e.imagen) {
+            avatarHtml = `<img src="${e.imagen}" class="w-12 h-12 rounded-full object-cover border border-border-light dark:border-border-dark">`;
+          }
+
+          row.innerHTML = `
+            ${avatarHtml}
+            <div class="flex-1">
+              <p class="font-semibold text-content-light dark:text-content-dark text-lg">${e.name || '—'}</p>
+              <div class="flex items-center gap-2">
+                 <span class="inline-block w-2 h-2 rounded-full ${e.role === 'driver' ? 'bg-blue-500' : 'bg-gray-400'}"></span>
+                 <p class="text-sm text-subtle-light dark:text-subtle-dark">${getRoleLabel(e.role)}</p>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-subtle-light dark:text-subtle-dark">chevron_right</span>`;
+          row.addEventListener('click', () => {
+            // Detalle no implementado full, pero podemos guardar en LS temporal
+            try { localStorage.setItem('empleado_detalle', JSON.stringify(e.raw)); } catch { }
+            // alert('Detalle de ' + e.name); // Para demo
+          });
+          listBox.appendChild(row);
+        });
+      }
+
+      async function addEmployee() {
+        const nameFull = prompt('Nombre completo del empleado (Nombre Apellidos):');
+        if (!nameFull) return;
+
+        // Split name (simple)
+        const parts = nameFull.trim().split(' ');
+        const nombre = parts[0];
+        const apellidos = parts.slice(1).join(' ') || 'Apellido';
+
+        let role = prompt('Rol:\n1. Conductor (driver)\n2. Mecánico\n3. Administrativo\n4. Limpiador\n5. Otro', '1');
+        if (!role) return;
+
+        // Map selection or text
+        const map = { '1': 'driver', '2': 'mechanic', '3': 'admin_staff', '4': 'cleaner' };
+        if (map[role]) role = map[role];
+        else if (role.toLowerCase() === 'conductor') role = 'driver';
+        else if (role.toLowerCase() === 'mecanico') role = 'mechanic';
+
+        // Create via API
+        try {
+          await ApiClient.createDriver({
+            codigo: 'EMP-' + Date.now().toString().slice(-4),
+            nombre, apellidos,
+            telephone: '', email: `emp${Date.now()}@empresa.com`,
+            fecha_alta: new Date().toISOString().slice(0, 10),
+            rol: role || 'driver'
+          });
+          await refreshList();
+          alert('Empleado añadido');
+        } catch (e) { alert('Error: ' + e.message); }
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        refreshList();
+        search?.addEventListener('input', () => render());
+        roleFilter?.addEventListener('change', () => render());
+        document.getElementById('btnAddEmp')?.addEventListener('click', addEmployee);
+      });
+    })();
+  </script>
+</body>
+
+</html>
