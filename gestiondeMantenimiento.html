@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestión de Mantenimiento</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#1E88E5",
+          "secondary": "#90A4AE",
+          "accent": "#FF9800",
+          "success": "#4CAF50",
+          "warning": "#FFC107",
+          "danger": "#F44336",
+          "background-light": "#F5F5F5",
+          "background-dark": "#101922",
+        },
+        fontFamily: { "display": ["Manrope", "sans-serif"] },
+        borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24 }
+  body { min-height: max(884px, 100dvh); }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+
+  <!-- Header -->
+  <div class="sticky top-0 z-10 flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-gray-200 dark:border-gray-700">
+    <div class="flex items-center">
+      <button id="btnBack" class="flex size-12 shrink-0 items-center justify-center rounded-full text-gray-800 dark:text-gray-200">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+    </div>
+    <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center text-gray-900 dark:text-white">Gestión de Mantenimiento</h2>
+    <div class="flex w-12 items-center justify-end"></div>
+  </div>
+
+  <div class="p-4 space-y-4">
+    <!-- Search -->
+    <div class="relative">
+      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+      <input id="inpSearch" class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 py-3 pl-10 pr-4 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Buscar por matrícula..." type="text"/>
+    </div>
+
+    <!-- KPIs -->
+    <div class="flex flex-wrap gap-4">
+      <div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <p class="text-secondary text-sm font-medium leading-normal">Pendientes</p>
+        <p id="kpiPendientes" class="text-accent tracking-light text-2xl font-bold leading-tight">0</p>
+      </div>
+      <div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <p class="text-secondary text-sm font-medium leading-normal">En Progreso</p>
+        <p id="kpiProgreso" class="text-warning tracking-light text-2xl font-bold leading-tight">0</p>
+      </div>
+      <div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <p class="text-secondary text-sm font-medium leading-normal">Completados</p>
+        <p id="kpiCompletados" class="text-success tracking-light text-2xl font-bold leading-tight">0</p>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="pb-3">
+      <div class="flex border-b border-gray-200 dark:border-gray-700 justify-between">
+        <a id="tabProximos" class="flex flex-col items-center justify-center border-b-[3px] border-b-primary text-primary pb-[13px] pt-4 flex-1 cursor-pointer">
+          <p class="text-sm font-bold leading-normal tracking-[0.015em]">Próximos</p>
+        </a>
+        <a id="tabHistorial" class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-secondary pb-[13px] pt-4 flex-1 cursor-pointer">
+          <p class="text-sm font-bold leading-normal tracking-[0.015em]">Historial</p>
+        </a>
+      </div>
+    </div>
+
+    <!-- Filters (placeholder simple de tipo) -->
+    <div class="flex gap-3 flex-wrap pr-4">
+      <div class="relative">
+        <button id="btnTipo" class="flex h-10 items-center justify-center gap-x-2 rounded-lg bg-gray-200 dark:bg-gray-700 pl-4 pr-2">
+          <p id="lblTipo" class="text-gray-800 dark:text-gray-200 text-sm font-medium leading-normal">Filtrar por Tipo</p>
+          <span class="material-symbols-outlined text-gray-800 dark:text-gray-200">arrow_drop_down</span>
+        </button>
+        <div id="menuTipo" class="absolute mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg hidden">
+          <button data-type="*" class="block w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700">Todos</button>
+          <button data-type="ITV" class="block w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700">ITV</button>
+          <button data-type="Aceite" class="block w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700">Aceite</button>
+          <button data-type="Revisión" class="block w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700">Revisión</button>
+          <button data-type="Frenos" class="block w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700">Frenos</button>
+          <button data-type="Neumáticos" class="block w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700">Neumáticos</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lists -->
+    <div id="listContainer" class="space-y-3">
+      <!-- tarjetas por JS -->
+    </div>
+  </div>
+
+  <!-- FAB (sin lógica de alta, enlaza a Flota para registrar) -->
+  <div class="fixed bottom-6 right-6">
+    <a href="gestiondeFlota.html" class="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-white shadow-lg">
+      <span class="material-symbols-outlined text-3xl">add</span>
+    </a>
+  </div>
+
+</div>
+
+<!-- ======= LÓGICA ======= -->
+<script>
+/* ------------------ Config / Estado ------------------ */
+const LS_KEY = 'flota_autobuses_v1';
+let currentTab = 'proximos'; // 'proximos' | 'historial'
+let typeFilter = '*';
+let searchText = '';
+
+/* ------------------ Utilidades ------------------ */
+const qs = s => document.querySelector(s);
+const qsa = s => [...document.querySelectorAll(s)];
+const addMonths = (date, n) => { const d = new Date(date); d.setMonth(d.getMonth() + n); return d; };
+const daysUntil = (target, from = new Date()) => {
+  const t = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+  const f = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+  return Math.round((t - f) / (1000*60*60*24));
+};
+const fmt = d => (d instanceof Date ? d.toISOString().slice(0,10) : '');
+
+/* ------------------ Carga ------------------ */
+function loadBuses() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
+  catch { return []; }
+}
+function getAllMaintenances(buses) {
+  const all = [];
+  buses.forEach(b => (b.maintenance || []).forEach(m => all.push({...m, _plate: b.plate, _model: b.model})));
+  return all;
+}
+function lastByType(list, type) {
+  const f = (list || []).filter(m => (m.type||'').toLowerCase() === type.toLowerCase() && m.date);
+  if (!f.length) return null;
+  f.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  return f[0];
+}
+
+/* ------------------ Reglas Próximos (por FECHA, como en Dashboard) ------------------ */
+function computeUpcoming(buses) {
+  const now = new Date();
+  const cards = [];
+  const pushCard = (bus, type, dueDate, icon) => {
+    const d = daysUntil(dueDate, now);
+    cards.push({
+      kind: 'proximo',
+      type,
+      date: fmt(dueDate),
+      days: d,
+      icon,
+      plate: bus.plate,
+      model: bus.model,
+      status: d < 0 ? 'Atrasado' : 'Pendiente',
+      href: 'gestiondeFlota.html'
+    });
+  };
+
+  buses.forEach(bus => {
+    const maint = bus.maintenance || [];
+
+    // ITV: última + 12m
+    const itv = lastByType(maint, 'ITV');
+    if (itv && itv.date) pushCard(bus, 'ITV', addMonths(new Date(itv.date + 'T00:00:00'), 12), 'build');
+    else pushCard(bus, 'ITV', addMonths(new Date(), 0), 'build'); // sin historial => ahora
+
+    // Aceite: +6m
+    const oil = lastByType(maint, 'Aceite');
+    if (oil && oil.date) pushCard(bus, 'Aceite', addMonths(new Date(oil.date + 'T00:00:00'), 6), 'oil_barrel');
+    else pushCard(bus, 'Aceite', addMonths(new Date(), 0), 'oil_barrel');
+
+    // Revisión: +12m
+    const rev = lastByType(maint, 'Revisión');
+    if (rev && rev.date) pushCard(bus, 'Revisión', addMonths(new Date(rev.date + 'T00:00:00'), 12), 'engineering');
+    else pushCard(bus, 'Revisión', addMonths(new Date(), 0), 'engineering');
+  });
+
+  // Orden: primero atrasados (más urgentes), luego próximos (por fecha)
+  cards.sort((a,b) => {
+    const ar = a.days < 0 ? 0 : 1;
+    const br = b.days < 0 ? 0 : 1;
+    if (ar !== br) return ar - br;
+    return (a.date || '').localeCompare(b.date || '');
+  });
+
+  return cards;
+}
+
+/* ------------------ Render ------------------ */
+function iconByType(type) {
+  const t = (type||'').toLowerCase();
+  if (t.includes('freno')) return 'tire_repair';
+  if (t.includes('neum')) return 'tire_repair';
+  if (t.includes('limp')) return 'local_car_wash';
+  if (t.includes('eléct')) return 'electrical_services';
+  if (t.includes('aceite')) return 'oil_barrel';
+  if (t.includes('revisión')) return 'engineering';
+  if (t.includes('itv')) return 'build';
+  return 'build';
+}
+
+function chip(status) {
+  const s = (status||'').toLowerCase();
+  if (s === 'completado' || s === 'completada')
+    return `<span class="inline-flex items-center rounded-full bg-success/20 px-2 py-1 text-xs font-medium text-success">Completado</span>`;
+  if (s === 'en progreso')
+    return `<span class="inline-flex items-center rounded-full bg-warning/20 px-2 py-1 text-xs font-medium text-warning">En Progreso</span>`;
+  if (s === 'atrasado')
+    return `<span class="inline-flex items-center rounded-full bg-danger/20 px-2 py-1 text-xs font-medium text-danger">Atrasado</span>`;
+  return `<span class="inline-flex items-center rounded-full bg-accent/20 px-2 py-1 text-xs font-medium text-accent">Pendiente</span>`;
+}
+
+function cardProximo(item) {
+  if (typeFilter !== '*' && item.type !== typeFilter) return '';
+  if (searchText && !item.plate.toLowerCase().includes(searchText)) return '';
+  const subtitle = item.days === 0 ? 'Hoy'
+                  : (item.days < 0 ? `Vencido hace ${Math.abs(item.days)} día(s)`
+                                   : `Programado para ${item.date} (en ${item.days} día(s))`);
+  const status = item.status;
+  return `
+  <a href="${item.href}" class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 cursor-pointer">
+    <div class="flex items-center justify-center rounded-lg bg-primary/20 shrink-0 size-12">
+      <span class="material-symbols-outlined text-primary">${item.icon || iconByType(item.type)}</span>
+    </div>
+    <div class="flex flex-col justify-center flex-1">
+      <p class="text-gray-900 dark:text-white text-base font-bold leading-normal line-clamp-1">${item.type} - <span class="text-primary">${item.plate}</span></p>
+      <p class="text-secondary text-sm font-normal leading-normal line-clamp-2">${subtitle}</p>
+    </div>
+    <div class="flex flex-col items-end gap-2">
+      ${chip(status)}
+      <span class="material-symbols-outlined text-gray-400 dark:text-gray-500">chevron_right</span>
+    </div>
+  </a>`;
+}
+
+function cardHist(m) {
+  if (typeFilter !== '*' && (m.type||'') !== typeFilter) return '';
+  if (searchText && !(m._plate||'').toLowerCase().includes(searchText)) return '';
+  const when = m.date ? `Realizado el ${m.date}` : 'Sin fecha';
+  return `
+  <a href="gestiondeFlota.html" class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 cursor-pointer">
+    <div class="flex items-center justify-center rounded-lg bg-primary/20 shrink-0 size-12">
+      <span class="material-symbols-outlined text-primary">${iconByType(m.type)}</span>
+    </div>
+    <div class="flex flex-col justify-center flex-1">
+      <p class="text-gray-900 dark:text-white text-base font-bold leading-normal line-clamp-1">${m.type||'Mantenimiento'} - <span class="text-primary">${m._plate||''}</span></p>
+      <p class="text-secondary text-sm font-normal leading-normal line-clamp-2">${when} ${m.cost!=null? ` · Coste € ${(parseFloat(m.cost)||0).toFixed(2)}`:''}</p>
+    </div>
+    <div class="flex flex-col items-end gap-2">
+      ${chip('Completado')}
+      <span class="material-symbols-outlined text-gray-400 dark:text-gray-500">chevron_right</span>
+    </div>
+  </a>`;
+}
+
+function render() {
+  const container = qs('#listContainer');
+  container.innerHTML = '';
+
+  const buses = loadBuses();
+  const allMaint = getAllMaintenances(buses);
+
+  // KPIs
+  const upcoming = computeUpcoming(buses);
+  qs('#kpiPendientes').textContent = upcoming.filter(x => x.days >= 0).length;
+  qs('#kpiProgreso').textContent = 0; // placeholder hasta que gestionéis tareas en curso
+  qs('#kpiCompletados').textContent = allMaint.length;
+
+  // Render listado según pestaña
+  if (currentTab === 'proximos') {
+    const html = upcoming.map(cardProximo).filter(Boolean).join('') || emptyState('No hay próximos mantenimientos.');
+    container.innerHTML = html;
+  } else {
+    // Historial: últimos 100 por fecha desc
+    allMaint.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+    const html = allMaint.slice(0,100).map(cardHist).filter(Boolean).join('') || emptyState('No hay historial de mantenimientos.');
+    container.innerHTML = html;
+  }
+}
+
+function emptyState(text) {
+  return `<div class="p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+    <p class="text-sm text-secondary">${text}</p>
+  </div>`;
+}
+
+/* ------------------ Eventos UI ------------------ */
+qs('#btnBack').addEventListener('click', () => { window.location.href = 'dashboard.html'; });
+
+qs('#tabProximos').addEventListener('click', () => {
+  currentTab = 'proximos';
+  qs('#tabProximos').classList.add('border-b-primary','text-primary');
+  qs('#tabHistorial').classList.remove('border-b-primary','text-primary');
+  qs('#tabHistorial').classList.add('border-b-transparent','text-secondary');
+  render();
+});
+qs('#tabHistorial').addEventListener('click', () => {
+  currentTab = 'historial';
+  qs('#tabHistorial').classList.add('border-b-primary','text-primary');
+  qs('#tabProximos').classList.remove('border-b-primary','text-primary');
+  qs('#tabProximos').classList.add('border-b-transparent','text-secondary');
+  render();
+});
+
+qs('#inpSearch').addEventListener('input', (e) => {
+  searchText = (e.target.value||'').toLowerCase().trim();
+  render();
+});
+
+// Filtro por tipo (menú simple)
+qs('#btnTipo').addEventListener('click', () => {
+  qs('#menuTipo').classList.toggle('hidden');
+});
+qsa('#menuTipo [data-type]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    typeFilter = btn.getAttribute('data-type');
+    qs('#lblTipo').textContent = typeFilter === '*' ? 'Filtrar por Tipo' : `Tipo: ${typeFilter}`;
+    qs('#menuTipo').classList.add('hidden');
+    render();
+  });
+});
+document.addEventListener('click', (ev) => {
+  const m = qs('#menuTipo'); const b = qs('#btnTipo');
+  if (!m.contains(ev.target) && !b.contains(ev.target)) m.classList.add('hidden');
+});
+
+/* ------------------ Init + Auto-refresh ------------------ */
+window.addEventListener('DOMContentLoaded', render);
+// Si otra pestaña modifica el almacenamiento (añadir/eliminar mantenimientos), refrescar
+window.addEventListener('storage', (e) => { if (e.key === LS_KEY) render(); });
+</script>
+</body>
+</html>
