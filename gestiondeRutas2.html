@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Work+Sans:wght@400;500;700;900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1173d4",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "foreground-light": "#0d141b",
+                        "foreground-dark": "#f6f7f8",
+                        "subtle-light": "#e7edf3",
+                        "subtle-dark": "#202a33",
+                        "muted-light": "#4c739a",
+                        "muted-dark": "#8a949e",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="flex-1 pb-24">
+<header class="sticky top-0 z-10 flex items-center justify-between bg-background-light/80 px-4 py-3 backdrop-blur-sm dark:bg-background-dark/80">
+<button class="text-foreground-light dark:text-foreground-dark">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold text-foreground-light dark:text-foreground-dark">Gestión de Rutas</h1>
+<div class="w-8"></div>
+</header>
+<main class="p-4">
+<div class="space-y-6">
+<div>
+<div class="relative mb-4">
+<input class="form-input w-full rounded-full border-0 bg-subtle-light dark:bg-subtle-dark text-foreground-light dark:text-foreground-dark placeholder:text-muted-light dark:placeholder:text-muted-dark focus:ring-2 focus:ring-primary h-12 px-12 text-base" placeholder="Buscar rutas..." value=""/>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-light dark:text-muted-dark">search</span>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-muted-light dark:text-muted-dark">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-xl font-bold text-foreground-light dark:text-foreground-dark">Rutas Activas</h2>
+<button class="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-bold text-white">
+<span class="material-symbols-outlined">add</span>
+<span>Añadir Ruta</span>
+</button>
+</div>
+<div class="space-y-4">
+<div class="rounded-xl bg-subtle-light/40 dark:bg-subtle-dark/40 overflow-hidden">
+<div class="h-40 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBs9Yt9iYY-mPbz6WgX59yU3dFWpHpXbe-kU97NOefMryBWPjOCn6epx2YapyXpNIoA0IrdxegVlTEdxRMIMoyLKHnQjUBUcF1ZK3gRrO2LKfZ02TsSUyhzy-ahcg8XOdzD5ZeC7iTQAfs_gLr0zc5BGKyU4oDE0sxQQOPynnvxTztpwxDhOIvPK697iQ_khC8NcKB6ebxtLNU7qFbe8KojAab-p23lq70faarnCtaSOQotTp55HkupegTLAX8GqlWG2wXq2EVZ6w')">
+<div class="flex h-full w-full items-end bg-gradient-to-t from-black/60 to-transparent p-4">
+<div class="text-white">
+<h3 class="text-lg font-bold">Ruta Norte Express</h3>
+<p class="text-sm">Madrid - Barcelona</p>
+</div>
+</div>
+</div>
+<div class="p-4">
+<div class="flex items-center justify-between text-sm mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-muted-light dark:text-muted-dark text-base">directions_bus</span>
+<span class="text-foreground-light dark:text-foreground-dark font-medium">Bus 101</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-muted-light dark:text-muted-dark text-base">schedule</span>
+<span class="text-foreground-light dark:text-foreground-dark font-medium">08:00 - 16:00</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-green-500 text-base">trip_origin</span>
+<span class="text-foreground-light dark:text-foreground-dark font-medium">En Ruta</span>
+</div>
+</div>
+<div class="flex justify-end gap-2">
+<button class="flex items-center justify-center rounded-full h-10 px-4 bg-primary/10 text-primary text-sm font-bold tracking-wide dark:bg-primary/20">
+<span class="truncate">Ver Detalles</span>
+</button>
+<button class="flex items-center justify-center rounded-full h-10 px-4 bg-primary text-white text-sm font-bold tracking-wide">
+<span class="truncate">Editar</span>
+</button>
+</div>
+</div>
+</div>
+<div class="rounded-xl bg-subtle-light/40 dark:bg-subtle-dark/40 overflow-hidden">
+<div class="h-40 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBs9Yt9iYY-mPbz6WgX59yU3dFWpHpXbe-kU97NOefMryBWPjOCn6epx2YapyXpNIoA0IrdxegVlTEdxRMIMoyLKHnQjUBUcF1ZK3gRrO2LKfZ02TsSUyhzy-ahcg8XOdzD5ZeC7iTQAfs_gLr0zc5BGKyU4oDE0sxQQOPynnvxTztpwxDhOIvPK697iQ_khC8NcKB6ebxtLNU7qFbe8KojAab-p23lq70faarnCtaSOQotTp55HkupegTLAX8GqlWG2wXq2EVZ6w')">
+<div class="flex h-full w-full items-end bg-gradient-to-t from-black/60 to-transparent p-4">
+<div class="text-white">
+<h3 class="text-lg font-bold">Ruta del Sur</h3>
+<p class="text-sm">Sevilla - Valencia</p>
+</div>
+</div>
+</div>
+<div class="p-4">
+<div class="flex items-center justify-between text-sm mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-muted-light dark:text-muted-dark text-base">directions_bus</span>
+<span class="text-foreground-light dark:text-foreground-dark font-medium">Bus 205</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-muted-light dark:text-muted-dark text-base">schedule</span>
+<span class="text-foreground-light dark:text-foreground-dark font-medium">10:30 - 18:30</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-yellow-500 text-base">pending</span>
+<span class="text-foreground-light dark:text-foreground-dark font-medium">Pendiente</span>
+</div>
+</div>
+<div class="flex justify-end gap-2">
+<button class="flex items-center justify-center rounded-full h-10 px-4 bg-primary/10 text-primary text-sm font-bold tracking-wide dark:bg-primary/20">
+<span class="truncate">Ver Detalles</span>
+</button>
+<button class="flex items-center justify-center rounded-full h-10 px-4 bg-primary text-white text-sm font-bold tracking-wide">
+<span class="truncate">Editar</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<footer class="fixed bottom-0 left-0 right-0 border-t border-subtle-light/50 bg-background-light/90 backdrop-blur-lg dark:border-subtle-dark/50 dark:bg-background-dark/90">
+<nav class="flex justify-around p-2">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 text-muted-light dark:text-muted-dark" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-xs font-medium">Inicio</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 bg-primary/10 text-primary dark:bg-primary/20" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="text-xs font-bold">Rutas</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 text-muted-light dark:text-muted-dark" href="#">
+<span class="material-symbols-outlined">work</span>
+<span class="text-xs font-medium">Viajes</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 text-muted-light dark:text-muted-dark" href="#">
+<span class="material-symbols-outlined">directions_bus</span>
+<span class="text-xs font-medium">Flota</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 text-muted-light dark:text-muted-dark" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-xs font-medium">Empleados</span>
+</a>
+</nav>
+<div class="h-safe-area-inset-bottom bg-background-light dark:bg-background-dark"></div>
+</footer>
+</div>
+
+</body></html>
+
