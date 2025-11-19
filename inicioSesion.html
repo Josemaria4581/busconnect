@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Inicio de sesión</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#1173d4",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+            "text-light": "#101922",
+            "text-dark": "#f6f7f8",
+            "placeholder-light": "#6b7280",
+            "placeholder-dark": "#9ca3af",
+            "border-light": "#d1d5db",
+            "border-dark": "#4b5563"
+          },
+          fontFamily: { display: ["Work Sans", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+
+    .bus-logo {
+      width: 80px;
+      height: 80px;
+      background-color: #1173d4;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+  </style>
+
+  <script src="app-auth.js"></script>
+  <script src="api-sync.js"></script>
+  <script src="db-seed.js"></script>
+  <script>if (window.SeedDB) SeedDB.ensure();</script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+  <div class="flex flex-col items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-sm">
+      <div class="flex flex-col items-center mb-6">
+        <div class="bus-logo mb-4">
+          <svg class="h-12 w-12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 2c-2.21 0-4 1.79-4 4h8c0-2.21-1.79-4-4-4zm8-7a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h2V4a2 2 0 114 0v2h4V4a2 2 0 114 0v2h2z"
+              stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <h1 class="text-2xl font-bold">Gestión de Autobuses</h1>
+        <p class="mt-2 text-sm text-placeholder-light dark:text-placeholder-dark text-center" id="hintText"></p>
+      </div>
+
+      <div
+        class="rounded-xl border border-border-light dark:border-border-dark bg-white/70 dark:bg-background-dark/40 backdrop-blur p-3">
+        <div class="grid grid-cols-2 gap-2 p-1 rounded-xl bg-slate-100 dark:bg-slate-800">
+          <button id="tabLogin" class="rounded-lg py-2 text-sm font-bold">Acceder</button>
+          <button id="tabRegister" class="rounded-lg py-2 text-sm font-bold">Crear cuenta</button>
+        </div>
+
+        <div id="msgBox" class="hidden mt-3 rounded-lg border px-3 py-2 text-sm"></div>
+
+        <!-- LOGIN -->
+        <form id="loginForm" class="mt-4 space-y-3">
+          <div>
+            <label class="sr-only" for="loginEmail">Correo</label>
+            <input id="loginEmail" type="email" placeholder="Correo"
+              class="w-full px-4 py-3 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg placeholder-placeholder-light dark:placeholder-placeholder-dark focus:outline-none focus:ring-2 focus:ring-primary" />
+          </div>
+          <div>
+            <label class="sr-only" for="loginPass">Contraseña</label>
+            <input id="loginPass" type="password" placeholder="Contraseña"
+              class="w-full px-4 py-3 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg placeholder-placeholder-light dark:placeholder-placeholder-dark focus:outline-none focus:ring-2 focus:ring-primary" />
+          </div>
+          <button
+            class="w-full bg-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-primary/90 transition-colors text-lg"
+            type="submit">
+            Acceder
+          </button>
+        </form>
+
+        <!-- REGISTER -->
+        <form id="registerForm" class="mt-4 space-y-3 hidden">
+          <div>
+            <label class="sr-only" for="regName">Nombre</label>
+            <input id="regName" type="text" placeholder="Nombre y apellidos"
+              class="w-full px-4 py-3 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg placeholder-placeholder-light dark:placeholder-placeholder-dark focus:outline-none focus:ring-2 focus:ring-primary" />
+          </div>
+          <div>
+            <label class="sr-only" for="regEmail">Correo</label>
+            <input id="regEmail" type="email" placeholder="Correo"
+              class="w-full px-4 py-3 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg placeholder-placeholder-light dark:placeholder-placeholder-dark focus:outline-none focus:ring-2 focus:ring-primary" />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="sr-only" for="regPass">Contraseña</label>
+              <input id="regPass" type="password" placeholder="Contraseña"
+                class="w-full px-4 py-3 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg placeholder-placeholder-light dark:placeholder-placeholder-dark focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div>
+            <div>
+              <label class="sr-only" for="regPass2">Repite</label>
+              <input id="regPass2" type="password" placeholder="Repite"
+                class="w-full px-4 py-3 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg placeholder-placeholder-light dark:placeholder-placeholder-dark focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div>
+          </div>
+          <!-- Rol eliminado -->
+          <button
+            class="w-full bg-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-primary/90 transition-colors text-lg"
+            type="submit">
+            Crear cuenta
+          </button>
+        </form>
+      </div>
+
+      <p class="text-center text-sm text-placeholder-light dark:text-placeholder-dark mt-6">
+        © 2024 Empresa de Autobuses. Todos los derechos reservados.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const $ = (id) => document.getElementById(id);
+
+      // Si ya hay sesión, redirige
+      try {
+        const s = window.AppAuth && AppAuth.getSession ? AppAuth.getSession() : null;
+        if (s && s.role) {
+          window.location.href = AppAuth.roleHome(s.role);
+          return;
+        }
+      } catch { }
+
+      const tabLogin = $('tabLogin');
+      const tabRegister = $('tabRegister');
+      const loginForm = $('loginForm');
+      const registerForm = $('registerForm');
+      const msgBox = $('msgBox');
+      const hintText = $('hintText');
+
+      function showMsg(text, type) {
+        msgBox.classList.remove('hidden');
+        msgBox.textContent = text;
+        msgBox.className = 'mt-3 rounded-lg border px-3 py-2 text-sm ' + (
+          type === 'ok'
+            ? 'border-green-300 bg-green-50 text-green-800 dark:border-green-700 dark:bg-green-900/30 dark:text-green-200'
+            : 'border-red-300 bg-red-50 text-red-800 dark:border-red-700 dark:bg-red-900/30 dark:text-red-200'
+        );
+      }
+      function clearMsg() { msgBox.classList.add('hidden'); msgBox.textContent = ''; }
+
+      function setActive(which) {
+        clearMsg();
+        if (which === 'login') {
+          loginForm.classList.remove('hidden');
+          registerForm.classList.add('hidden');
+          tabLogin.className = 'rounded-lg py-2 text-sm font-bold bg-white dark:bg-slate-700';
+          tabRegister.className = 'rounded-lg py-2 text-sm font-bold text-slate-600 dark:text-slate-300';
+        } else {
+          registerForm.classList.remove('hidden');
+          loginForm.classList.add('hidden');
+          tabRegister.className = 'rounded-lg py-2 text-sm font-bold bg-white dark:bg-slate-700';
+          tabLogin.className = 'rounded-lg py-2 text-sm font-bold text-slate-600 dark:text-slate-300';
+        }
+      }
+
+      // Primera vez: obliga a registrar
+      let hasUsers = false;
+      try {
+        const users = AppAuth.loadUsers();
+        hasUsers = Array.isArray(users) && users.length > 0;
+      } catch { }
+
+      if (!hasUsers) {
+        hintText.textContent = 'Bienvenido. Crea una cuenta o accede si ya tienes una.';
+        setActive('register');
+      } else {
+        hintText.textContent = 'Accede con tu correo y contraseña.';
+        setActive('login');
+        // Optional: Hide register tab if strict "subsequent times login" is desired, 
+        // but user might want to add more users. The request says "las siguientes PUEDES acceder", 
+        // not "MUST ONLY login". But sticking to the "first time" narrative, I'll prioritize Login.
+        // Let's keep Register available but ensure Login is default. 
+        // Use normal behavior for now, but if the user insists, we could hide it.
+        // Given "tengas que registrarte" (must) vs "puedes acceder" (can), I'll leave Register visible for now 
+        // unless strictly interpretation requires removing it. 
+        // I will just leave it open but focused on Login.
+      }
+
+      tabLogin.addEventListener('click', () => setActive('login'));
+      tabRegister.addEventListener('click', () => setActive('register'));
+
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearMsg();
+        const email = $('loginEmail').value;
+        const password = $('loginPass').value;
+
+        if (!email || !password) {
+          showMsg('Rellena todos los campos', 'err');
+          return;
+        }
+
+        try {
+          // Use real API Client
+          const res = await ApiClient.login(email, password);
+          // res = { token, user: { ... } }
+
+          showMsg('Login correcto. Redirigiendo...', 'ok');
+
+          // Save session info
+          localStorage.setItem('role', res.user.role);
+          localStorage.setItem('username', res.user.name);
+          localStorage.setItem('current_user_id', res.user.id);
+
+          setTimeout(() => {
+            // Redirect based on role
+            const r = (res.user.role || '').toLowerCase();
+            if (r === 'conductor' || r === 'driver') window.location.href = 'aplicacionConductor.html';
+            else if (r === 'cliente' || r === 'client') window.location.href = 'gestiondeRutas.html';
+            else window.location.href = 'dashboard.html';
+          }, 800);
+
+        } catch (err) {
+          showMsg(err.message || 'Credenciales incorrectas', 'err');
+        }
+      });
+
+      registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearMsg();
+        try {
+          const name = $('regName').value;
+          const email = $('regEmail').value;
+          const pass1 = $('regPass').value;
+          const pass2 = $('regPass2').value;
+          const role = 'cliente'; // Por defecto todos son clientes
+
+          if (pass1 !== pass2) {
+            showMsg('Las contraseñas no coinciden.', 'err');
+            return;
+          }
+          const session = await AppAuth.register({ name, email, password: pass1, role });
+          window.location.href = AppAuth.roleHome(session.role);
+        } catch (err) {
+          showMsg(err?.message || 'No se pudo crear la cuenta.', 'err');
+        }
+      });
+    })();
+  </script>
+</body>
+
+</html>
