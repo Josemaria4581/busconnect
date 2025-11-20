@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Mis Tickets</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+  <script>
+    tailwind.config={ darkMode:"class", theme:{ extend:{ colors:{ primary:"#1173d4", "background-light":"#f6f7f8", "background-dark":"#101922", "text-light":"#101922", "text-dark":"#f6f7f8", "card-light":"#ffffff", "card-dark":"#1a2530", "border-light":"#e5e7eb", "border-dark":"#374151" }, fontFamily:{ display:["Work Sans","sans-serif"] }, borderRadius:{ DEFAULT:"0.25rem", lg:"0.5rem", xl:"0.75rem", full:"9999px" } } } };
+  </script>
+  <style> body{min-height:max(884px,100dvh)} .material-symbols-outlined{font-variation-settings:'FILL'0,'wght'400,'GRAD'0,'opsz'24} </style>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+  <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+    <header class="sticky top-0 z-10 flex items-center justify-between bg-background-light/80 px-4 py-3 backdrop-blur-sm dark:bg-background-dark/80 border-b border-border-light dark:border-border-dark">
+      <button class="text-text-light dark:text-text-dark" onclick="window.location.href='gestiondeRutas.html'" title="Volver">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+      <h1 class="text-lg font-bold">Mis Tickets</h1>
+      <span class="w-6"></span>
+    </header>
+
+    <main class="p-4 space-y-4">
+      <div id="ticketsList" class="space-y-3"></div>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 right-0 border-t bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark">
+      <nav class="flex justify-around p-2">
+        <a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 text-muted-light dark:text-muted-dark" href="dashboard.html">
+          <span class="material-symbols-outlined">home</span>
+          <span class="text-xs font-medium">Inicio</span>
+        </a>
+        <a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 bg-primary/10 text-primary dark:bg-primary/20" href="gestiondeRutas.html">
+          <span class="material-symbols-outlined">map</span>
+          <span class="text-xs font-bold">Rutas</span>
+        </a>
+        <a class="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 text-muted-light dark:text-muted-dark" href="gestiondeViajesDiscrecionales.html">
+          <span class="material-symbols-outlined">work</span>
+          <span class="text-xs font-medium">Viajes</span>
+        </a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>
+    (function guardCliente(){
+      const role = localStorage.getItem('role');
+      if (!role) { window.location.href='inicioSesion.html'; return; }
+      if (role === 'conductor') { window.location.href='aplicacionConductor.html'; return; }
+    })();
+
+    (function tickets(){
+      const $ = (s)=>document.querySelector(s);
+      const fmtEUR = (n)=> new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(n||0);
+      const key = 'tickets_v1';
+      const me = localStorage.getItem('current_user_id');
+      const load = () => { try { return JSON.parse(localStorage.getItem(key)||'[]'); } catch { return []; } };
+      const save = (l) => localStorage.setItem(key, JSON.stringify(l));
+
+      async function pdfTicket(t){
+        try{
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF({ unit:"pt", format:"a4" });
+          doc.setFont('helvetica','bold'); doc.setFontSize(18);
+          doc.text('Billete de Autobús', 40, 60);
+          doc.setFont('helvetica','normal'); doc.setFontSize(12);
+          let y=95;
+          doc.text('Ruta: '+(t.routeName||'-'), 40, y); y+=18;
+          doc.text('Origen: '+(t.origin||'-')+'  '+(t.originTime||''), 40, y); y+=16;
+          doc.text('Destino: '+(t.destination||'-')+'  '+(t.destinationTime||''), 40, y); y+=16;
+          doc.text('Precio: '+fmtEUR(t.price), 40, y); y+=16;
+          doc.text('Fecha compra: '+new Date(t.createdAt||Date.now()).toLocaleString('es-ES'), 40, y);
+          doc.save(`Ticket_${(t.routeName||'ruta').replace(/\s+/g,'_')}_${Date.now()}.pdf`);
+        }catch(e){ alert('No se pudo generar el PDF'); }
+      }
+
+      function cancelTicket(id){
+        const list = load();
+        const idx = list.findIndex(t => t.id===id && (!t.cancelled));
+        if (idx<0) return;
+        if (!confirm('¿Cancelar este ticket?')) return;
+        list[idx] = { ...list[idx], cancelled:true, cancelledAt: new Date().toISOString() };
+        save(list); render();
+      }
+
+      function render(){
+        const box = $('#ticketsList');
+        box.innerHTML = '';
+        const mine = load().filter(t => !me || t.buyer===me).sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt));
+        if (!mine.length){
+          box.innerHTML = `<div class="p-4 rounded-lg bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark"><p class="text-sm text-muted-light dark:text-muted-dark">No tienes tickets todavía.</p></div>`;
+          return;
+        }
+        mine.forEach(t => {
+          const card = document.createElement('div');
+          card.className = 'p-4 rounded-lg bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark';
+          const status = t.cancelled ? '<span class="text-xs font-bold text-red-600">Cancelado</span>' : '<span class="text-xs font-bold text-green-600">Activo</span>';
+          card.innerHTML = `
+            <div class="flex items-start gap-4">
+              <div class="rounded-lg bg-primary/10 dark:bg-primary/20 p-2 text-primary"><span class="material-symbols-outlined">confirmation_number</span></div>
+              <div class="flex-1 min-w-0">
+                <p class="font-bold truncate">${t.routeName||'Ruta'}</p>
+                <p class="text-sm text-muted-light dark:text-muted-dark truncate">${t.origin||'-'} → ${t.destination||'-'}</p>
+                <p class="text-sm text-muted-light dark:text-muted-dark">Salida: ${t.originTime||''} · Llegada: ${t.destinationTime||''}</p>
+                <p class="text-sm mt-1"><span class="font-semibold">Precio:</span> ${fmtEUR(t.price||0)}</p>
+                <p class="text-xs text-muted-light dark:text-muted-dark">Compra: ${new Date(t.createdAt||Date.now()).toLocaleString('es-ES')}</p>
+              </div>
+              <div class="flex flex-col items-end gap-2 shrink-0">${status}
+                <button class="px-3 py-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg text-sm" data-dl>Descargar</button>
+                ${t.cancelled?'' : '<button class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm" data-cancel>Cancelar</button>'}
+              </div>
+            </div>`;
+          card.querySelector('[data-dl]')?.addEventListener('click', ()=> pdfTicket(t));
+          card.querySelector('[data-cancel]')?.addEventListener('click', ()=> cancelTicket(t.id));
+          box.appendChild(card);
+        });
+      }
+
+      window.addEventListener('DOMContentLoaded', render);
+      window.addEventListener('storage', (e)=>{ if (e.key==='tickets_v1') render(); });
+    })();
+</script>
+</body>
+</html>
+<script src="app-ui.js"></script>

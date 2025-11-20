@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+
+<html class="light" lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Reporte de Incidencia</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#005A9C",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+            "secondary-light": "#F0F0F0",
+            "accent": "#FFA500",
+            "text-dark": "#333333",
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-black dark:text-white">
+  <div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+    <div
+      class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+      <div class="flex size-12 shrink-0 items-center justify-center"
+        onclick="window.location.href='aplicacionConductor.html'">
+        <span class="material-symbols-outlined text-text-dark dark:text-white">arrow_back</span>
+      </div>
+      <h2 class="text-text-dark dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">
+        Reporte de Incidencia</h2>
+      <div class="flex w-12 items-center justify-end">
+        <button id="btnHistorial"
+          class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-text-dark dark:text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+          <span class="material-symbols-outlined">history</span>
+        </button>
+      </div>
+    </div>
+    <div class="p-4 space-y-6">
+      <div class="bg-secondary-light dark:bg-gray-800 rounded-lg p-4">
+        <div class="flex flex-col min-w-40 flex-1 mb-4">
+          <label class="text-text-dark dark:text-gray-300 text-base font-medium leading-normal pb-2">Conductor
+            afectado</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">person</span>
+            <select id="incSelConductor"
+              class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-dark dark:text-white focus:outline-0 focus:ring-0 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-primary h-14 placeholder:text-gray-400 pl-10 pr-4 py-3 text-base font-normal leading-normal">
+              <option value="">Seleccione conductor</option>
+              <option value="conductor1">Juan Pérez</option>
+              <option value="conductor2">Ana García</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex flex-col min-w-40 flex-1 mb-4">
+          <label class="text-text-dark dark:text-gray-300 text-base font-medium leading-normal pb-2">Viaje
+            actual</label>
+          <div class="relative">
+            <span
+              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">directions_bus</span>
+            <select id="incSelViaje"
+              class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-dark dark:text-white focus:outline-0 focus:ring-0 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-primary h-14 placeholder:text-gray-400 pl-10 pr-4 py-3 text-base font-normal leading-normal">
+              <option value="">VIAJE-00123</option>
+              <option value="viaje2">VIAJE-00124</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex flex-col min-w-40 flex-1 mb-4">
+          <label class="text-text-dark dark:text-gray-300 text-base font-medium leading-normal pb-2">Tipo de
+            incidencia</label>
+          <div class="relative">
+            <span
+              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">warning</span>
+            <select id="incTipo"
+              class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-dark dark:text-white focus:outline-0 focus:ring-0 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-primary h-14 placeholder:text-gray-400 pl-10 pr-4 py-3 text-base font-normal leading-normal">
+              <option value="">Seleccione el tipo de incidencia</option>
+              <option value="enfermedad">Enfermedad</option>
+              <option value="averia">Avería personal</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex flex-col min-w-40 flex-1 mb-4">
+          <label class="text-text-dark dark:text-gray-300 text-base font-medium leading-normal pb-2">Descripción del
+            problema</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-4 text-gray-500">description</span>
+            <textarea id="incDesc"
+              class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-dark dark:text-white focus:outline-0 focus:ring-0 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-primary min-h-36 placeholder:text-gray-400 pl-10 pr-4 py-3 text-base font-normal leading-normal"
+              placeholder="Añada una descripción detallada de la incidencia"></textarea>
+          </div>
+        </div>
+        <div
+          class="flex items-center justify-between mb-4 bg-white dark:bg-gray-700 p-3 rounded-lg border border-gray-300 dark:border-gray-600">
+          <label class="text-text-dark dark:text-gray-300 text-base font-medium" for="suplente">Necesita
+            suplente</label>
+          <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+            <input
+              class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer checked:right-0 checked:bg-primary"
+              id="suplente" name="suplente" type="checkbox" />
+            <label
+              class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 dark:bg-gray-500 cursor-pointer"
+              for="suplente"></label>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div class="flex flex-col">
+            <label class="text-text-dark dark:text-gray-300 text-base font-medium leading-normal pb-2">Fecha</label>
+            <div class="relative">
+              <span
+                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">calendar_today</span>
+              <input
+                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-dark dark:text-white focus:outline-0 focus:ring-0 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-primary h-14 placeholder:text-gray-400 pl-10 pr-4 py-3 text-base font-normal leading-normal"
+                type="date" />
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <label class="text-text-dark dark:text-gray-300 text-base font-medium leading-normal pb-2">Hora</label>
+            <div class="relative">
+              <span
+                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">schedule</span>
+              <input
+                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-dark dark:text-white focus:outline-0 focus:ring-0 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-primary h-14 placeholder:text-gray-400 pl-10 pr-4 py-3 text-base font-normal leading-normal"
+                type="time" />
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col min-w-40 flex-1 mb-4">
+          <label class="text-text-dark dark:text-gray-300 text-base font-medium leading-normal pb-2">Ubicación
+            aproximada</label>
+          <div class="relative">
+            <span
+              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">location_on</span>
+            <input
+              class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-dark dark:text-white focus:outline-0 focus:ring-0 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-primary h-14 placeholder:text-gray-400 pl-10 pr-4 py-3 text-base font-normal leading-normal"
+              placeholder="Calle Falsa 123, Ciudad" type="text" />
+            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-primary">
+              <span class="material-symbols-outlined">my_location</span>
+            </button>
+          </div>
+        </div>
+        <div class="mt-2 h-32 rounded-lg bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+          <img class="w-full h-full object-cover rounded-lg" data-alt="Mapa abstracto de una ciudad"
+            data-location="Ciudad"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNUOdHygdLVS9qrIIh4vaRHcZ4bdk7F_iiQByj_ZukCuasAipdVkjsL_k6U-dqwBGyYpECXRBkCHvoAMyb8ZniUF-CvSBu9ms6RB-EupxR1N5KL_LSw3PBvrbVeEbvGTZffCM0dkgLeI0yZ1Uix5ezBPKoP7rKdyD_uBs8tghg96mw-W2XuU6fwY6oVahWtIcip5GAlQBHLpPup-Xs9apczBQPYDordPqoZ2nKBlmB-vqPcXXgvvfQG2EJU8zx4VAilUR8-MRKzA" />
+        </div>
+      </div>
+      <div
+        class="px-4 py-3 fixed bottom-0 left-0 right-0 bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-700">
+        <div class="flex gap-4">
+          <button id="btnSuplente"
+            class="flex-1 max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-gray-200 dark:bg-gray-700 text-text-dark dark:text-white text-base font-bold leading-normal tracking-[0.015em]">Necesita
+            Suplente</button>
+          <button id="btnEnviar"
+            class="flex-1 max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em]">Enviar
+            Incidencia</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    .toggle-checkbox:checked {
+      right: 0;
+      border-color: #005A9C;
+    }
+
+    .toggle-checkbox:checked+.toggle-label {
+      background-color: #005A9C;
+    }
+  </style>
+  <script>
+      (function setupIncidencias() {
+        const role = localStorage.getItem('role');
+        if (role !== 'conductor' && role !== 'driver') { window.location.href = 'inicioSesion.html'; return; }
+        const h = document.getElementById('btnHistorial');
+        if (h) h.onclick = function () { window.location.href = 'historialNotisConductor.html'; };
+        const s = document.getElementById('btnSuplente');
+        if (s) s.onclick = function () { window.location.href = 'asignarConductorSuplente.html'; };
+        const e = document.getElementById('btnEnviar');
+        if (e) e.onclick = async function () {
+          try {
+            const driverId = localStorage.getItem('current_user_id');
+            // Check if ApiClient is available
+            if (typeof ApiClient !== 'undefined') {
+              const type = document.getElementById('incTipo')?.value || '';
+              const desc = document.getElementById('incDesc')?.value || '';
+              const title = `Incidencia: ${type}`;
+
+              await ApiClient.createIncident({
+                titulo: title,
+                descripcion: desc,
+                tipo: type,
+                estado: 'abierta',
+                conductor_id: driverId
+              });
+              alert('Incidencia enviada correctamente al servidor.');
+            } else {
+              // Fallback or error if no API
+              console.error('ApiClient not found');
+              alert('Error: No se puede conectar con el servidor.');
+            }
+          } catch (err) {
+            console.error(err);
+            alert('Error al enviar incidencia');
+          }
+          window.location.href = 'aplicacionConductor.html';
+        };
+      })();
+
+  </script>
+</body>
+
+</html>
