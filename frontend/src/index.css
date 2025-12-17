@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+@theme {
+    --color-primary: #1173d4;
+
+    /* Legacy Colors Port - Suavizados para modo oscuro */
+    --color-background-light: #f6f7f8;
+    --color-background-dark: #1a2332;
+
+    --color-text-light: #101922;
+    --color-text-dark: #e5e7eb;
+
+    --color-placeholder-light: #6b7280;
+    --color-placeholder-dark: #9ca3af;
+
+    --color-border-light: #d1d5db;
+    --color-border-dark: #374151;
+
+    --color-card-dark: #242f3f;
+
+    --font-display: "Work Sans", sans-serif;
+}
+
+/* Global Reset */
+body {
+    @apply font-display bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark;
+}
