@@ -6,14 +6,18 @@ async function seed() {
 
   // 0. CLEANUP (Reverse order of dependencies)
   console.log('Cleaning up...');
-  await pool.query('DELETE FROM asignaciones');
-  await pool.query('DELETE FROM mantenimientos');
-  await pool.query('DELETE FROM viajes_discrecionales');
-  await pool.query('DELETE FROM incidencias');
-  await pool.query('DELETE FROM rutas');
-  await pool.query('DELETE FROM conductores');
-  await pool.query('DELETE FROM clientes');
-  await pool.query('DELETE FROM autobuses');
+  await pool.query('PRAGMA foreign_keys = OFF');
+  try { await pool.query('DELETE FROM mensajes_chat'); } catch (e) { }
+  try { await pool.query('DELETE FROM tickets'); } catch (e) { }
+  try { await pool.query('DELETE FROM asignaciones'); } catch (e) { }
+  try { await pool.query('DELETE FROM mantenimientos'); } catch (e) { }
+  try { await pool.query('DELETE FROM viajes_discrecionales'); } catch (e) { }
+  try { await pool.query('DELETE FROM incidencias'); } catch (e) { }
+  try { await pool.query('DELETE FROM rutas'); } catch (e) { }
+  try { await pool.query('DELETE FROM conductores'); } catch (e) { }
+  try { await pool.query('DELETE FROM clientes'); } catch (e) { }
+  try { await pool.query('DELETE FROM autobuses'); } catch (e) { }
+  await pool.query('PRAGMA foreign_keys = ON');
 
   // 1. Buses
   console.log('Seeding Buses...');
@@ -22,10 +26,16 @@ async function seed() {
     "https://images.unsplash.com/photo-1557223562-6c77ef16210f?q=80&w=600&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1600793575654-910699b5e4d4?q=80&w=600&auto=format&fit=crop"
   ];
-  for (let i = 0; i < 15; i++) {
+  const capacities = [19, 25, 35, 50, 55, 63, 71];
+  const models = ['Mercedes-Benz Sprinter', 'Iveco Daily', 'Volvo 9700', 'Scania Touring', 'Irizar i8', 'Setra S 517', 'Neoplan Skyliner'];
+
+  for (let i = 0; i < 20; i++) {
     const plate = `${1000 + i} ${String.fromCharCode(65 + i % 26)}${String.fromCharCode(66 + i % 26)}${String.fromCharCode(67 + i % 26)}`;
+    const capacity = capacities[Math.floor(Math.random() * capacities.length)];
+    const model = models[Math.floor(Math.random() * models.length)];
+
     await pool.query(`INSERT INTO autobuses (matricula, modelo, capacidad, kilometros_totales, estado, imagen) VALUES (?, ?, ?, ?, ?, ?)`,
-      [plate, 'Volvo 9700', 55, Math.floor(Math.random() * 300000) + 10000, 'operativo', busImages[i % 3]]
+      [plate, model, capacity, Math.floor(Math.random() * 300000) + 10000, 'operativo', busImages[i % 3]]
     );
   }
 
