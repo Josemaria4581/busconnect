@@ -41,8 +41,23 @@ app.use("/viajes-discrecionales", viajesRouter);
 app.use("/notificaciones", notificacionesRouter);
 app.use("/auth", authRoutes);
 app.use("/incidencias", incidenciasRouter);
-import ticketsRouter from "./routes/tickets.js";
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// ... (existing API routes)
+
 app.use("/tickets", ticketsRouter);
+
+// Servir archivos estáticos del frontend
+const frontendPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(frontendPath));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
 
 // Middleware de errores
 app.use((err, _req, res, _next) => {
