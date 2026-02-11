@@ -1,5 +1,6 @@
 ﻿import Database from 'better-sqlite3';
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
 import fs from 'fs';
 import path from 'path';
 
