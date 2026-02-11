@@ -13,7 +13,7 @@ export default function MaintenanceAlerts() {
                 // Filter and process (same logic as legacy)
                 const active = data.filter(m => m.estado !== 'realizado' && m.estado !== 'cancelado');
                 const processed = active.map(m => {
-                    const date = new Date(m.fecha_programada);
+                    const date = new Date(m.fecha_programada.replace(' ', 'T'));
                     const now = new Date();
                     const diffDays = Math.ceil((date - now) / (1000 * 60 * 60 * 24));
                     const isOverdue = diffDays < 0;

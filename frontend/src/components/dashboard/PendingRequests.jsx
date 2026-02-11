@@ -60,7 +60,13 @@ export default function PendingRequests() {
                         <div className="flex items-center gap-4 mt-1 text-sm text-gray-500 dark:text-gray-400">
                             <span className="flex items-center gap-1">
                                 <Clock className="w-4 h-4" />
-                                {new Date(req.fecha_salida).toLocaleString()}
+                                {(() => {
+                                    try {
+                                        return new Date(req.fecha_salida.replace(' ', 'T')).toLocaleString();
+                                    } catch (e) {
+                                        return req.fecha_salida;
+                                    }
+                                })()}
                             </span>
                             <span>{req.plazas} plazas</span>
                         </div>

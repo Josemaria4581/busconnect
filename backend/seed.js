@@ -128,7 +128,7 @@ export async function seed() {
           cliente_id, origen, destino, fecha_salida, fecha_llegada, plazas, 
           precio_total, estado, observaciones
         ) VALUES (
-          ?, 'Madrid', 'Segovia', '2026-06-01 09:00:00', '2026-06-01 18:00:00', 40,
+          ?, 'Madrid', 'Segovia', '2026-06-01T09:00:00', '2026-06-01T18:00:00', 40,
           450.00, 'pendiente', 'Excursión escolar'
         )`, [clientId]);
 
@@ -138,7 +138,7 @@ export async function seed() {
               cliente_id, origen, destino, fecha_salida, fecha_llegada, plazas, 
               precio_total, estado, conductor_id, autobus_id
             ) VALUES (
-              ?, 'Bilbao', 'San Sebastián', '2026-02-01 08:00:00', '2026-02-01 20:00:00', 30,
+              ?, 'Bilbao', 'San Sebastián', '2026-02-01T08:00:00', '2026-02-01T20:00:00', 30,
               300.00, 'aceptado', ?, ?
             )`, [clientId, driverId, bus1]);
     }
