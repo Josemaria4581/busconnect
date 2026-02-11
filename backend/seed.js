@@ -1,7 +1,7 @@
 import { pool } from './db.js';
 import bcrypt from 'bcryptjs';
 
-async function seed() {
+export async function seed() {
   console.log('Starting seed...');
 
   // 0. CLEANUP (Reverse order of dependencies)
@@ -164,9 +164,7 @@ async function seed() {
   console.log('Seed completed.');
 }
 
-export async function seed() {
-  // ... existing code ...
-}
+// ... existing code ...
 
 // Run if called directly (node seed.js)
 import { fileURLToPath } from 'url';

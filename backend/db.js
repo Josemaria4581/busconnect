@@ -11,12 +11,16 @@ const DB_PATH = process.env.DB_PATH || 'database.sqlite';
 const dbExists = fs.existsSync(DB_PATH);
 const db = new Database(DB_PATH);
 
-import bcrypt from 'bcryptjs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 if (!dbExists) {
   console.log('Inicializando base de datos SQLite...');
   try {
-    const schema = fs.readFileSync(path.join(process.cwd(), 'schema.sql'), 'utf-8');
+    const schemaPath = path.join(__dirname, 'schema.sql');
+    const schema = fs.readFileSync(schemaPath, 'utf-8');
     db.exec(schema);
     console.log('Esquema cargado.');
   } catch (err) {
