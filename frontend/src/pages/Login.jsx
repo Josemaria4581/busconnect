@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../components/Logo';
 import ThemeSelector from '../components/ThemeSelector';
-import { Eye, EyeOff } from 'lucide-react';
+import { Bus, Eye, EyeOff } from 'lucide-react';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -47,11 +47,10 @@ export default function Login() {
 
             <div className="w-full max-w-sm">
                 <div className="flex flex-col items-center mb-6">
-                    <Logo className="w-20 h-20 mb-4" />
-                    <h1 className="text-2xl font-bold text-text-light dark:text-text-dark">Gestión de Autobuses</h1>
-                    <p className="mt-2 text-sm text-placeholder-light dark:text-placeholder-dark text-center">
-                        Accede con tu correo y contraseña.
-                    </p>
+                    <Bus className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Gestión de Autobuses</h2>
+                    <p className="text-sm text-gray-500 font-mono">v2.0 - Remote Update</p>
+                    <p className="text-gray-500 mb-6">Accede con tu correo y contraseña.</p>
                 </div>
 
                 <div className="rounded-xl border border-border-light dark:border-border-dark bg-white/70 dark:bg-background-dark/40 backdrop-blur p-3 shadow-lg">
