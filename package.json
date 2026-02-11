@@ -1,0 +1,21 @@
+{
+    "name": "busconnect",
+    "version": "2.1.0",
+    "description": "Bus Management System - Full Stack Application",
+    "type": "module",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "node server.js"
+    },
+    "dependencies": {
+        "bcryptjs": "^3.0.3",
+        "better-sqlite3": "^12.6.2",
+        "cors": "^2.8.6",
+        "dotenv": "^16.4.1",
+        "express": "^4.22.1",
+        "jsonwebtoken": "^9.0.3",
+        "mysql2": "^3.9.3",
+        "sqlite3": "^5.1.7"
+    }
+}
