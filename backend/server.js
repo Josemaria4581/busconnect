@@ -12,6 +12,7 @@ import viajesRouter from "./routes/viajesDiscrecionales.js";
 import notificacionesRouter from "./routes/notificaciones.js";
 import authRoutes from "./routes/auth.js";
 import incidenciasRouter from "./routes/incidencias.js";
+import ticketsRouter from "./routes/tickets.js";
 
 dotenv.config();
 
