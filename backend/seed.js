@@ -164,4 +164,12 @@ async function seed() {
   console.log('Seed completed.');
 }
 
-seed().catch(console.error);
+export async function seed() {
+  // ... existing code ...
+}
+
+// Run if called directly (node seed.js)
+import { fileURLToPath } from 'url';
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  seed().catch(console.error);
+}

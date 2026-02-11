@@ -130,7 +130,7 @@ export default function FleetManagement() {
 
     return (
         <div className="flex flex-col min-h-screen bg-background-light dark:bg-background-dark transition-colors">
-            <Header title="Gestión de Flota" />
+            <Header title="Gestión de Flota (v2.0)" />
 
             <main className="flex-1 p-4 space-y-6">
                 {/* Controls */}
@@ -141,6 +141,27 @@ export default function FleetManagement() {
                     >
                         <Plus className="w-5 h-5" />
                         Añadir Autobús
+                    </button>
+
+                    <button
+                        onClick={async () => {
+                            if (confirm("¿ESTÁS SEGURO? Esto borrará todos los datos y restaurará los de fábrica.")) {
+                                try {
+                                    setLoading(true);
+                                    await api.post('/api/seed');
+                                    await loadBuses();
+                                    alert("Base de datos regenerada.");
+                                } catch (e) {
+                                    alert("Error: " + e.message);
+                                } finally {
+                                    setLoading(false);
+                                }
+                            }
+                        }}
+                        className="px-4 py-2 rounded-lg bg-gray-500 text-white font-bold hover:bg-gray-600 transition-colors flex items-center justify-center gap-2"
+                    >
+                        <Wrench className="w-5 h-5" />
+                        Reset DB
                     </button>
 
                     <div className="flex items-center gap-2 bg-white dark:bg-card-dark p-2 rounded-lg border border-border-light dark:border-border-dark">

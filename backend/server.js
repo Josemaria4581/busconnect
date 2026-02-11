@@ -51,6 +51,17 @@ const __dirname = path.dirname(__filename);
 
 app.use("/tickets", ticketsRouter);
 
+// Endpoint para regenerar la base de datos (SOLO PARA PRUEBAS)
+import { seed } from "./seed.js";
+app.post("/api/seed", async (req, res) => {
+  try {
+    await seed();
+    res.json({ message: "Base de datos regenerada correctamente" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Servir archivos estáticos del frontend
 const frontendPath = path.join(__dirname, '../frontend/dist');
 app.use(express.static(frontendPath));
