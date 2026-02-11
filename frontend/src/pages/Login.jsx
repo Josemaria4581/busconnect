@@ -49,7 +49,7 @@ export default function Login() {
                 <div className="flex flex-col items-center mb-6">
                     <Bus className="w-12 h-12 text-blue-600 mx-auto mb-4" />
                     <h2 className="text-2xl font-bold text-gray-900 mb-2">Gestión de Autobuses</h2>
-                    <p className="text-sm text-gray-500 font-mono">v2.0 - Remote Update</p>
+                    <p className="text-sm text-gray-500 font-mono">v2.1 - CACHE BUSTER</p>
                     <p className="text-gray-500 mb-6">Accede con tu correo y contraseña.</p>
                 </div>
 

@@ -68,6 +68,7 @@ const frontendPath = path.join(__dirname, '../frontend/dist');
 app.use(express.static(frontendPath));
 
 app.get('*', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
@@ -82,5 +83,6 @@ app.use((err, _req, res, _next) => {
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
+  console.log('--- SERVER v2.1 STARTED ---');
   console.log(`API escuchando en http://localhost:${PORT}`);
 });
