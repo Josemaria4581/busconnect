@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { ping } from "./db.js";
+import { ping, pool } from "./db.js";
 import { seed } from "./seed.js";
 import rutasRouter from "./routes/rutas.js";
 import autobusesRouter from "./routes/autobuses.js";
@@ -21,7 +21,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: true, // Permite cualquier origen que haga la petición
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -64,6 +64,20 @@ app.post("/api/seed", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Auto-seed si la base de datos está vacía (útil para despliegues efímeros en Render)
+const autoSeed = async () => {
+  try {
+    const [rows] = await pool.query("SELECT COUNT(*) as count FROM conductores");
+    if (rows[0].count <= 1) { // 1 porque db.js ya crea uno por defecto
+      console.log("Base de datos casi vacía. Cargando datos iniciales...");
+      await seed();
+    }
+  } catch (error) {
+    console.error("Error en auto-seed:", error);
+  }
+};
+autoSeed();
 
 
 const frontendPath = path.join(__dirname, '../frontend/dist');
