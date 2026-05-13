@@ -19,7 +19,7 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <NotificationProvider>
-          <BrowserRouter>
+          <BrowserRouter basename="/busconnect">
             <Routes>
               <Route path="/login" element={<Login />} />
 
