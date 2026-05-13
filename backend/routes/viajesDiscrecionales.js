@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import { pool } from "../db.js";
 
 const router = Router();
@@ -112,7 +112,7 @@ router.put("/:id", async (req, res, next) => {
 
     
     const getWeek = (d) => {
-      const date = new Date(Array.from(arguments).length > 0 ? d : new Date());
+      const date = new Date(d || new Date());
       date.setHours(0, 0, 0, 0);
       date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
       const week1 = new Date(date.getFullYear(), 0, 4);

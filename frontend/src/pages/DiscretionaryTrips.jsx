@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Header from '../components/Header';
 import FooterNav from '../components/FooterNav';
-import { MapPin, Flag, Send, Calendar, Clock, DollarSign, MessageSquare, CheckCircle, XCircle } from 'lucide-react';
+import { MapPin, Flag, Send, Calendar, Clock, DollarSign, MessageSquare, CheckCircle, XCircle, Bus } from 'lucide-react';
 import { MapContainer, TileLayer, Polyline, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -45,12 +45,14 @@ export default function DiscretionaryTrips() {
     const [loadingMap, setLoadingMap] = useState(false);
 
     const [drivers, setDrivers] = useState([]);
+    const [buses, setBuses] = useState([]);
     const [toast, setToast] = useState({ isOpen: false, type: 'info', message: '' });
     const showToast = (msg, type = 'success') => setToast({ isOpen: true, type, message: msg });
 
     useEffect(() => {
         loadTrips();
         loadDrivers();
+        loadBuses();
     }, []);
 
     const loadDrivers = async () => {
@@ -59,6 +61,15 @@ export default function DiscretionaryTrips() {
             setDrivers(data);
         } catch (e) {
             console.error("Error loading drivers", e);
+        }
+    };
+
+    const loadBuses = async () => {
+        try {
+            const { data } = await api.get('/autobuses');
+            setBuses(data);
+        } catch (e) {
+            console.error("Error loading buses", e);
         }
     };
 
@@ -83,16 +94,8 @@ export default function DiscretionaryTrips() {
         return () => clearInterval(interval);
     }, [selectedTrip]);
 
-    // Scroll chat only when new messages arrive or on load
     useEffect(() => {
-        // Simple check: if we are at the bottom, or close to it, scroll to invalid.
-        // For now, let's just scroll on initial load or if user sending.
-        // But to satisfy "scrolls automatically endlessly", we should restrict it.
-        // A simple fix for "scrolls without touching" is to check if it's the first load
-        // or if the new message count > old message count.
-        // For simplicity here, preventing strict auto-scroll on every poll:
         if (chatMessages.length > 0) {
-            // check if last message is from agent (us) -> scroll
             const lastMsg = chatMessages[chatMessages.length - 1];
             if (lastMsg.emisor === 'agent') {
                 messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -100,7 +103,6 @@ export default function DiscretionaryTrips() {
         }
     }, [chatMessages]);
 
-    // Map logic when trip selected
     useEffect(() => {
         if (selectedTrip && selectedTrip.origen && selectedTrip.destino) {
             updateMap(selectedTrip.origen, selectedTrip.destino);
@@ -114,7 +116,6 @@ export default function DiscretionaryTrips() {
         if (!selectedTrip) return;
         try {
             const { data } = await api.get(`/viajes-discrecionales/${selectedTrip.id}/chat`);
-            // Only update state if length changed to unexpected re-renders
             if (data.length !== chatMessages.length) {
                 setChatMessages(data);
             }
@@ -127,11 +128,11 @@ export default function DiscretionaryTrips() {
         if (!newMessage.trim() || !selectedTrip) return;
         try {
             await api.post(`/viajes-discrecionales/${selectedTrip.id}/chat`, {
-                emisor: 'agent', // Admin/Agent role
+                emisor: 'agent',
                 mensaje: newMessage
             });
             setNewMessage('');
-            fetchMessages(); // This will trigger scroll bc emisor=agent
+            fetchMessages();
         } catch (e) {
             showToast('Error enviando mensaje', 'danger');
         }
@@ -186,7 +187,6 @@ export default function DiscretionaryTrips() {
             <Header title="Viajes Discrecionales" />
 
             <main className="flex-1 p-3 sm:p-4 flex flex-col lg:flex-row gap-4 overflow-auto pb-20">
-                {/* List Column */}
                 <div className="w-full lg:w-72 lg:shrink-0 bg-white dark:bg-card-dark rounded-xl shadow border border-border-light dark:border-border-dark flex flex-col max-h-64 lg:max-h-none overflow-hidden">
                     <div className="p-4 border-b border-border-light dark:border-border-dark flex-none">
                         <h2 className="font-bold text-lg">Solicitudes Recientes</h2>
@@ -216,12 +216,9 @@ export default function DiscretionaryTrips() {
                     </div>
                 </div>
 
-                {/* Details Column */}
                 {selectedTrip ? (
                     <div className="flex-1 flex flex-col gap-4 min-w-0">
-                        {/* Top: Map & Info */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* Map */}
                             <div className="bg-white dark:bg-card-dark rounded-xl shadow border border-border-light dark:border-border-dark overflow-hidden relative h-64 md:h-96">
                                 <MapContainer
                                     key={selectedTrip ? selectedTrip.id : 'empty'}
@@ -236,7 +233,6 @@ export default function DiscretionaryTrips() {
                                 {loadingMap && <div className="absolute inset-0 bg-white/50 z-[1000] flex items-center justify-center"><span className="text-sm font-bold bg-white px-2 py-1 rounded">Cargando Mapa...</span></div>}
                             </div>
 
-                            {/* Info & Actions */}
                             <div className="bg-white dark:bg-card-dark rounded-xl shadow border border-border-light dark:border-border-dark p-4 flex flex-col overflow-y-auto">
                                 <h3 className="font-bold text-xl mb-4 text-primary">Detalles del Viaje #{selectedTrip.id}</h3>
 
@@ -268,58 +264,83 @@ export default function DiscretionaryTrips() {
                                         </div>
                                     </div>
 
-                                    {/* Driver Assignment Section */}
-                                    <div className="pt-2 border-t border-dashed space-y-2">
-                                        <div className="flex items-center justify-between">
-                                            <label className="text-xs font-bold text-gray-500 block">Asignar Conductor (Validación Tacógrafo)</label>
-                                            <button
-                                                onClick={async () => {
+                                    {/* Assignment Section */}
+                                    <div className="pt-2 border-t border-dashed space-y-4">
+                                        {/* Driver */}
+                                        <div className="space-y-2">
+                                            <div className="flex items-center justify-between">
+                                                <label className="text-xs font-bold text-gray-500 block">Asignar Conductor</label>
+                                                <button
+                                                    onClick={async () => {
+                                                        try {
+                                                            const res = await api.post(`/viajes-discrecionales/${selectedTrip.id}/auto-assign`);
+                                                            const { trip, conductor } = res.data;
+                                                            setSelectedTrip(trip);
+                                                            setTrips(trips.map(t => t.id === trip.id ? trip : t));
+                                                            showToast(`✅ Asignado: ${conductor.nombre} ${conductor.apellidos}`);
+                                                        } catch (e) {
+                                                            const msg = e.response?.data?.error || "Error en asignación automática";
+                                                            showToast(`❌ ${msg}`, 'danger');
+                                                        }
+                                                    }}
+                                                    className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded hover:bg-primary/20 font-bold flex items-center gap-1"
+                                                >
+                                                    <Clock size={10} /> Auto-Asignar
+                                                </button>
+                                            </div>
+                                            <select
+                                                className="w-full text-sm border rounded p-2 bg-gray-50 dark:bg-slate-800"
+                                                value={selectedTrip.conductor_id || ''}
+                                                onChange={async (e) => {
+                                                    const driverId = e.target.value;
                                                     try {
-                                                        const res = await api.post(`/viajes-discrecionales/${selectedTrip.id}/auto-assign`);
-                                                        const { trip, conductor } = res.data;
-
-                                                        // Update state
-                                                        setSelectedTrip(trip);
-                                                        setTrips(trips.map(t => t.id === trip.id ? trip : t));
-
-                                                        showToast(`✅ Asignado: ${conductor.nombre} ${conductor.apellidos}`);
-                                                    } catch (e) {
-                                                        const msg = e.response?.data?.error || "Error en asignación automática";
-                                                        showToast(`❌ ${msg}`, 'danger');
+                                                        await api.put(`/viajes-discrecionales/${selectedTrip.id}`, { conductor_id: driverId });
+                                                        const updated = { ...selectedTrip, conductor_id: driverId };
+                                                        setSelectedTrip(updated);
+                                                        setTrips(trips.map(t => t.id === updated.id ? updated : t));
+                                                        showToast('Conductor asignado correctamente');
+                                                    } catch (err) {
+                                                        const msg = err.response?.data?.error || "Error al asignar conductor";
+                                                        showToast(msg, 'danger');
                                                     }
                                                 }}
-                                                className="text-xs bg-primary/10 text-primary px-2 py-1 rounded hover:bg-primary/20 font-bold flex items-center gap-1"
                                             >
-                                                <Clock size={12} /> Auto-Asignar (Normativa)
-                                            </button>
+                                                <option value="">-- Sin Conductor --</option>
+                                                {drivers.map(d => (
+                                                    <option key={d.id} value={d.id}>{d.nombre} {d.apellidos}</option>
+                                                ))}
+                                            </select>
                                         </div>
-                                        <select
-                                            className="w-full text-sm border rounded p-2 bg-gray-50 dark:bg-slate-800"
-                                            value={selectedTrip.conductor_id || ''}
-                                            onChange={async (e) => {
-                                                const driverId = e.target.value;
-                                                try {
-                                                    await api.put(`/viajes-discrecionales/${selectedTrip.id}`, { conductor_id: driverId });
-                                                    const updated = { ...selectedTrip, conductor_id: driverId };
-                                                    setSelectedTrip(updated);
-                                                    setTrips(trips.map(t => t.id === updated.id ? updated : t));
-                                                    showToast('Conductor asignado correctamente');
-                                                } catch (err) {
-                                                    console.error(err);
-                                                    const msg = err.response?.data?.error || "Error al asignar conductor";
-                                                    showToast(msg, 'danger');
-                                                }
-                                            }}
-                                        >
-                                            <option value="">-- Sin Conductor --</option>
-                                            {drivers.map(d => (
-                                                <option key={d.id} value={d.id}>{d.nombre} {d.apellidos}</option>
-                                            ))}
-                                        </select>
+
+                                        {/* Bus */}
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold text-gray-500 block">Asignar Autobús</label>
+                                            <select
+                                                className="w-full text-sm border rounded p-2 bg-gray-50 dark:bg-slate-800"
+                                                value={selectedTrip.autobus_id || ''}
+                                                onChange={async (e) => {
+                                                    const busId = e.target.value;
+                                                    try {
+                                                        await api.put(`/viajes-discrecionales/${selectedTrip.id}`, { autobus_id: busId });
+                                                        const updated = { ...selectedTrip, autobus_id: busId };
+                                                        setSelectedTrip(updated);
+                                                        setTrips(trips.map(t => t.id === updated.id ? updated : t));
+                                                        showToast('Autobús asignado correctamente');
+                                                    } catch (err) {
+                                                        const msg = err.response?.data?.error || "Error al asignar autobús";
+                                                        showToast(msg, 'danger');
+                                                    }
+                                                }}
+                                            >
+                                                <option value="">-- Sin Autobús --</option>
+                                                {buses.map(b => (
+                                                    <option key={b.id} value={b.id}>{b.matricula} - {b.modelo} ({b.capacidad} plazas)</option>
+                                                ))}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* Actions */}
                                 <div className="border-t pt-4 mt-4 space-y-2">
                                     <p className="text-xs font-bold text-gray-500 mb-2">Acciones</p>
                                     <div className="flex gap-2">
@@ -328,7 +349,7 @@ export default function DiscretionaryTrips() {
                                                 onClick={() => handleStatusChange('confirmado')}
                                                 className="flex-1 bg-green-600 text-white py-2 rounded-lg font-bold text-sm hover:bg-green-700 flex items-center justify-center gap-2"
                                             >
-                                                <CheckCircle size={16} /> Confirmar (Pagado)
+                                                <CheckCircle size={16} /> Confirmar
                                             </button>
                                         )}
                                         {selectedTrip.estado !== 'rechazado' && (
@@ -344,7 +365,6 @@ export default function DiscretionaryTrips() {
                             </div>
                         </div>
 
-                        {/* Bottom: Chat */}
                         <div className="h-64 lg:h-80 bg-white dark:bg-card-dark rounded-xl shadow border border-border-light dark:border-border-dark flex flex-col overflow-hidden">
                             <div className="p-3 bg-gray-50 dark:bg-slate-800 border-b border-border-light dark:border-border-dark flex items-center gap-2">
                                 <MessageSquare size={16} className="text-primary" />
