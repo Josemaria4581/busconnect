@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { NotificationProvider } from './context/NotificationContext';
@@ -19,7 +19,7 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <NotificationProvider>
-          <BrowserRouter basename="/busconnect">
+          <HashRouter>
             <Routes>
               <Route path="/login" element={<Login />} />
 
@@ -47,7 +47,7 @@ function App() {
 
               <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
-          </BrowserRouter>
+          </HashRouter>
         </NotificationProvider>
       </AuthProvider>
     </ThemeProvider>
