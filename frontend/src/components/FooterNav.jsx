@@ -32,11 +32,6 @@ export default function FooterNav() {
                     </Link>
                 ))}
             </nav>
-            <div className="text-center pb-2">
-                <a href="/db-viewer" className="text-[10px] text-primary/50 hover:text-primary uppercase tracking-widest font-bold">
-                    Ver Base de Datos
-                </a>
-            </div>
         </footer>
     );
 }
