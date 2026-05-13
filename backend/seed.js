@@ -77,7 +77,7 @@ export async function seed() {
 
   
   console.log('Seeding Clients...');
-  await pool.query(`INSERT INTO clientes (nombre, email, password) VALUES ('Cliente Demo', 'cliente@demo.com', ?)`, [hash]);
+  await pool.query(`INSERT INTO clientes (nombre, email, password) VALUES ('Jose Maria', 'cliente@demo.com', ?)`, [hash]);
 
   
   console.log('Seeding Routes...');
