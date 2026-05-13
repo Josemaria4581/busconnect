@@ -48,7 +48,7 @@ export default function Login() {
             <div className="w-full max-w-sm">
                 <div className="flex flex-col items-center mb-6">
                     <Bus className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">BusConnect v2.1</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">BusConnect</h2>
                     <p className="text-gray-500 mb-6">Accede con tu correo y contraseña.</p>
                 </div>
 
