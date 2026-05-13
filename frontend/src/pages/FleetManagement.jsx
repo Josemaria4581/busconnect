@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import FooterNav from '../components/FooterNav';
 import { Bus, Plus, Edit, Trash2, Wrench, X, Save, Filter } from 'lucide-react';
+import AppModal, { AppToast } from '../components/ui/AppModal';
 import api from '../lib/api';
 
 export default function FleetManagement() {
@@ -13,6 +14,11 @@ export default function FleetManagement() {
     const [showBusModal, setShowBusModal] = useState(false);
     const [showMaintModal, setShowMaintModal] = useState(false);
     const [selectedBus, setSelectedBus] = useState(null);
+    const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
+    const [seedModal, setSeedModal] = useState(false);
+    const [toast, setToast] = useState({ isOpen: false, type: 'info', message: '' });
+
+    const showToast = (message, type = 'success') => setToast({ isOpen: true, type, message });
 
     // Form states
     const [busForm, setBusForm] = useState({
@@ -88,13 +94,17 @@ export default function FleetManagement() {
         setShowMaintModal(true);
     };
 
-    const handleDelete = async (id) => {
-        if (!confirm('¿Eliminar este autobús?')) return;
+    const handleDelete = (id) => setDeleteModal({ isOpen: true, id });
+
+    const confirmDelete = async () => {
         try {
-            await api.delete(`/autobuses/${id}`);
+            await api.delete(`/autobuses/${deleteModal.id}`);
+            setDeleteModal({ isOpen: false, id: null });
             loadBuses();
+            showToast('Autobús eliminado correctamente');
         } catch (e) {
-            alert('Error al eliminar: ' + e.message);
+            setDeleteModal({ isOpen: false, id: null });
+            showToast('Error al eliminar: ' + e.message, 'danger');
         }
     };
 
@@ -108,8 +118,9 @@ export default function FleetManagement() {
             }
             setShowBusModal(false);
             loadBuses();
+            showToast(selectedBus ? 'Autobús actualizado' : 'Autobús creado');
         } catch (error) {
-            alert('Error al guardar: ' + error.message);
+            showToast('Error al guardar: ' + error.message, 'danger');
         }
     };
 
@@ -122,9 +133,23 @@ export default function FleetManagement() {
                 estado: 'pendiente'
             });
             setShowMaintModal(false);
-            alert('Mantenimiento programado correctamente');
+            showToast('Mantenimiento programado correctamente');
         } catch (error) {
-            alert('Error al guardar: ' + error.message);
+            showToast('Error al guardar: ' + error.message, 'danger');
+        }
+    };
+
+    const confirmSeed = async () => {
+        setSeedModal(false);
+        try {
+            setLoading(true);
+            await api.post('/api/seed');
+            await loadBuses();
+            showToast('Base de datos regenerada correctamente');
+        } catch (e) {
+            showToast('Error: ' + e.message, 'danger');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -134,31 +159,18 @@ export default function FleetManagement() {
 
             <main className="flex-1 p-4 space-y-6">
                 {/* Controls */}
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-wrap gap-3">
                     <button
                         onClick={handleAdd}
-                        className="flex-1 p-4 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+                        className="flex-1 min-w-[160px] p-3 sm:p-4 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
                     >
                         <Plus className="w-5 h-5" />
                         Añadir Autobús
                     </button>
 
                     <button
-                        onClick={async () => {
-                            if (confirm("¿ESTÁS SEGURO? Esto borrará todos los datos y restaurará los de fábrica.")) {
-                                try {
-                                    setLoading(true);
-                                    await api.post('/api/seed');
-                                    await loadBuses();
-                                    alert("Base de datos regenerada.");
-                                } catch (e) {
-                                    alert("Error: " + e.message);
-                                } finally {
-                                    setLoading(false);
-                                }
-                            }
-                        }}
-                        className="px-4 py-2 rounded-lg bg-gray-500 text-white font-bold hover:bg-gray-600 transition-colors flex items-center justify-center gap-2"
+                        onClick={() => setSeedModal(true)}
+                        className="px-4 py-2 rounded-lg bg-gray-500 text-white font-bold hover:bg-gray-600 transition-colors flex items-center justify-center gap-2 text-sm"
                     >
                         <Wrench className="w-5 h-5" />
                         Reset DB
@@ -193,7 +205,7 @@ export default function FleetManagement() {
                                         <Bus className="w-6 h-6" />
                                     </div>
                                     <div className="flex-1">
-                                        <div className="flex justify-between items-start">
+                                        <div className="flex flex-wrap justify-between items-start gap-2">
                                             <div>
                                                 <p className="font-bold text-text-light dark:text-text-dark text-lg">
                                                     {bus.matricula}
@@ -210,7 +222,7 @@ export default function FleetManagement() {
                                             {bus.kilometros_totales?.toLocaleString()} km
                                         </p>
                                     </div>
-                                    <div className="flex flex-col gap-2">
+                                    <div className="flex flex-wrap gap-1 mt-2 sm:mt-0">
                                         <span className={`px-3 py-1 rounded-full text-xs font-bold text-center ${bus.estado === 'operativo'
                                             ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
                                             : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
@@ -262,13 +274,16 @@ export default function FleetManagement() {
                         </div>
                         <form onSubmit={saveBus} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Matrícula</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Matrícula (0000XXX)</label>
                                 <input
                                     required
                                     type="text"
+                                    pattern="[0-9]{4}[A-Za-z]{3}"
+                                    title="Ejemplo: 1234ABC"
+                                    maxLength="7"
                                     value={busForm.matricula}
-                                    onChange={e => setBusForm({ ...busForm, matricula: e.target.value })}
-                                    className="w-full p-2 rounded-lg border dark:bg-gray-800 dark:border-gray-700"
+                                    onChange={e => setBusForm({ ...busForm, matricula: e.target.value.toUpperCase() })}
+                                    className="w-full p-2 rounded-lg border dark:bg-gray-800 dark:border-gray-700 uppercase"
                                 />
                             </div>
                             <div>
@@ -287,8 +302,13 @@ export default function FleetManagement() {
                                     <input
                                         required
                                         type="number"
+                                        min="1"
+                                        step="1"
+                                        onKeyDown={(e) => {
+                                            if (['e', 'E', '+', '-', '.'].includes(e.key)) e.preventDefault();
+                                        }}
                                         value={busForm.capacidad}
-                                        onChange={e => setBusForm({ ...busForm, capacidad: parseInt(e.target.value) })}
+                                        onChange={e => setBusForm({ ...busForm, capacidad: parseInt(e.target.value) || '' })}
                                         className="w-full p-2 rounded-lg border dark:bg-gray-800 dark:border-gray-700"
                                     />
                                 </div>
@@ -378,6 +398,10 @@ export default function FleetManagement() {
                     </div>
                 </div>
             )}
+
+            <AppModal isOpen={deleteModal.isOpen} type="danger" title="Eliminar Autobús" message="¿Eliminar este autobús? Esta acción no se puede deshacer." confirmText="Sí, Eliminar" cancelText="Cancelar" onConfirm={confirmDelete} onCancel={() => setDeleteModal({ isOpen: false, id: null })} />
+            <AppModal isOpen={seedModal} type="warning" title="Restaurar Base de Datos" message="¿ESTÁS SEGURO? Esto borrará todos los datos y restaurará los de fábrica. Esta acción no se puede deshacer." confirmText="Sí, Restaurar" cancelText="Cancelar" onConfirm={confirmSeed} onCancel={() => setSeedModal(false)} />
+            <AppToast isOpen={toast.isOpen} type={toast.type} message={toast.message} onClose={() => setToast({...toast, isOpen: false})} />
 
             <FooterNav />
         </div>

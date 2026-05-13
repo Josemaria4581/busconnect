@@ -4,10 +4,13 @@ import { useAuth } from '../context/AuthContext';
 import ThemeSelector from '../components/ThemeSelector';
 import { ChevronLeft, History, User as UserIcon, Bus, AlertTriangle, FileText, Calendar, Clock, MapPin, Locate, User, Calendar as CalIcon } from 'lucide-react';
 import api from '../lib/api';
+import { AppToast } from '../components/ui/AppModal';
 
 export default function DriverIncidents() {
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [toast, setToast] = useState({ isOpen: false, type: 'info', message: '' });
+    const showToast = (message, type = 'success') => setToast({ isOpen: true, type, message });
     const [formData, setFormData] = useState({
         conductor: '',
         viaje: '',
@@ -25,10 +28,10 @@ export default function DriverIncidents() {
                 ...formData,
                 conductor_id: user?.id
             });
-            alert('Incidencia enviada correctamente');
-            navigate('/driver');
+            showToast('Incidencia enviada correctamente');
+            setTimeout(() => navigate('/driver'), 1500);
         } catch (e) {
-            alert('Error al enviar incidencia');
+            showToast('Error al enviar incidencia', 'danger');
         }
     };
 
@@ -197,6 +200,7 @@ export default function DriverIncidents() {
                     </button>
                 </nav>
             </footer>
+            <AppToast isOpen={toast.isOpen} type={toast.type} message={toast.message} onClose={() => setToast({...toast, isOpen: false})} />
         </div>
     );
 }

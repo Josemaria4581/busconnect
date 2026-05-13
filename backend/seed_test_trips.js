@@ -4,7 +4,7 @@ async function seed() {
     try {
         console.log("Comenzando inserción de viajes de prueba...");
 
-        // 1. Ensure a client exists
+        
         let [clients] = await pool.query("SELECT id FROM clientes LIMIT 1");
         let clientId;
         if (clients.length === 0) {
@@ -14,8 +14,8 @@ async function seed() {
             clientId = clients[0].id;
         }
 
-        // 2. Loop dates
-        const startDate = new Date(); // Today
+        
+        const startDate = new Date(); 
         const endDate = new Date('2026-03-31');
 
         const origins = ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Bilbao'];
@@ -23,7 +23,7 @@ async function seed() {
 
         let count = 0;
         for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-            // Trip 1: Morning (08:00 - 14:00) -> 6h duration
+            
             const start1 = new Date(d);
             start1.setHours(8, 0, 0);
             const end1 = new Date(d);
@@ -44,7 +44,7 @@ async function seed() {
             ]);
             count++;
 
-            // Trip 2: Afternoon (16:00 - 20:00) -> 4h duration (Only 50% chance)
+            
             if (Math.random() > 0.5) {
                 const start2 = new Date(d);
                 start2.setHours(16, 0, 0);
@@ -68,7 +68,7 @@ async function seed() {
             }
         }
 
-        console.log(`✅ Se han insertado ${count} viajes de prueba hasta el 31 de marzo.`);
+        console.log(` Se han insertado ${count} viajes de prueba hasta el 31 de marzo.`);
 
     } catch (e) {
         console.error("Error seeding:", e);

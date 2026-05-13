@@ -87,8 +87,8 @@ router.put("/:id", async (req, res, next) => {
       "estado",
       "observaciones",
       "motivo_rechazo",
-      "conductor_id", // Ensure this is allowed
-      "autobus_id"    // Ensure this is allowed
+      "conductor_id", 
+      "autobus_id"    
     ];
     const updates = [];
     const params = [];
@@ -96,7 +96,7 @@ router.put("/:id", async (req, res, next) => {
     let newStart = null;
     let newEnd = null;
 
-    // 1. Collect updates
+    
     for (const field of fields) {
       if (field in req.body) {
         updates.push(`${field} = ?`);
@@ -110,7 +110,7 @@ router.put("/:id", async (req, res, next) => {
 
     if (updates.length === 0) return res.status(400).json({ error: "No hay campos para actualizar" });
 
-    // Helper to get ISO week number
+    
     const getWeek = (d) => {
       const date = new Date(Array.from(arguments).length > 0 ? d : new Date());
       date.setHours(0, 0, 0, 0);
@@ -119,9 +119,9 @@ router.put("/:id", async (req, res, next) => {
       return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
     };
 
-    // Helper: Validations
+    
     const checkTachograph = async (driverId, tripId, start, end) => {
-      // 1. Get all confirmed trips for this driver
+      
       const [allTrips] = await pool.query(
         "SELECT * FROM viajes_discrecionales WHERE conductor_id = ? AND estado = 'confirmado' AND id != ?",
         [driverId, tripId]
@@ -131,23 +131,23 @@ router.put("/:id", async (req, res, next) => {
       const startDay = start.toISOString().split('T')[0];
       const startWeek = getWeek(start);
 
-      // --- Accumulators ---
+      
       let dailyDriving = newDurationH;
       let weeklyDriving = newDurationH;
 
-      const MIN_REST_MS = 9 * 60 * 60 * 1000; // 9 hours reduced daily rest
+      const MIN_REST_MS = 9 * 60 * 60 * 1000; 
 
       for (const t of allTrips) {
         const tStart = new Date(t.fecha_salida);
         const tEnd = new Date(t.fecha_llegada);
         const tDuration = (tEnd - tStart) / 3600000;
 
-        // A. Overlap
+        
         if (start < tEnd && end > tStart) {
           return `Conflicto: Solapamiento con viaje #${t.id}`;
         }
 
-        // B. Rest Time (9h)
+        
         if (start >= tEnd && (start - tEnd) < MIN_REST_MS) {
           return `Descanso insufiente (<9h) tras viaje #${t.id}`;
         }
@@ -155,25 +155,25 @@ router.put("/:id", async (req, res, next) => {
           return `Descanso insufiente (<9h) antes de viaje #${t.id}`;
         }
 
-        // C. Daily Driving (Same Day)
+        
         if (tStart.toISOString().split('T')[0] === startDay) {
           dailyDriving += tDuration;
         }
 
-        // D. Weekly Driving (Same Week)
+        
         if (getWeek(tStart) === startWeek && tStart.getFullYear() === start.getFullYear()) {
           weeklyDriving += tDuration;
         }
       }
 
-      // Limits
+      
       if (dailyDriving > 9) return `Exceso Conducción Diaria: ${dailyDriving.toFixed(1)}h (Máx 9h)`;
       if (weeklyDriving > 56) return `Exceso Conducción Semanal: ${weeklyDriving.toFixed(1)}h (Máx 56h)`;
 
-      return null; // OK
+      return null; 
     };
 
-    // 2. If assigning a driver (or changing dates for a trip with a driver), VALIDATE
+    
     if (newDriverId || newStart || newEnd) {
       const [current] = await pool.query("SELECT * FROM viajes_discrecionales WHERE id = ?", [req.params.id]);
       if (current.length === 0) return res.status(404).json({ error: "Viaje no encontrado" });
@@ -200,10 +200,10 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-// ... (chat routes omitted for brevity found in original file) ...
-// NOTE: I am not editing chat routes, just adding auto-assign below
 
-// Auto-assign algorithm
+
+
+
 router.post("/:id/auto-assign", async (req, res, next) => {
   try {
     const [trips] = await pool.query("SELECT * FROM viajes_discrecionales WHERE id = ?", [req.params.id]);
@@ -216,11 +216,11 @@ router.post("/:id/auto-assign", async (req, res, next) => {
       "SELECT id, nombre, apellidos FROM conductores WHERE (rol = 'conductor' OR rol = 'driver') AND activo = 1"
     );
 
-    // Reuse helper logic (copy-paste inside or move to outer scope - since inside router, copying logic for simplicity in this context or extracting)
-    // To ensure consistency, let's extract the checkTachograph logic. 
-    // Since I cannot easily move it out of the router scope in this replace block without replacing the whole file, I will duplicate the lightweight logic for now 
-    // BUT actually, I can define the helper at the top level of the file if I replaced the whole file. 
-    // Here, I will implement the loop using the same logic.
+    
+    
+    
+    
+    
 
     const getWeek = (d) => {
       const date = new Date(d.getTime());
@@ -231,7 +231,7 @@ router.post("/:id/auto-assign", async (req, res, next) => {
     };
 
     let assignedDriverId = null;
-    const MIN_REST_MS = 9 * 60 * 60 * 1000; // 9h
+    const MIN_REST_MS = 9 * 60 * 60 * 1000; 
 
     for (const driver of candidates) {
       const [driversTrips] = await pool.query(
@@ -251,9 +251,9 @@ router.post("/:id/auto-assign", async (req, res, next) => {
         const tEnd = new Date(t.fecha_llegada);
         const tDuration = (tEnd - tStart) / 3600000;
 
-        if (start < tEnd && end > tStart) { isValid = false; break; } // Overlap
-        if (start >= tEnd && (start - tEnd) < MIN_REST_MS) { isValid = false; break; } // Rest after
-        if (end <= tStart && (tStart - end) < MIN_REST_MS) { isValid = false; break; } // Rest before
+        if (start < tEnd && end > tStart) { isValid = false; break; } 
+        if (start >= tEnd && (start - tEnd) < MIN_REST_MS) { isValid = false; break; } 
+        if (end <= tStart && (tStart - end) < MIN_REST_MS) { isValid = false; break; } 
 
         if (tStart.toISOString().split('T')[0] === startDay) dailyDriving += tDuration;
         if (getWeek(tStart) === startWeek && tStart.getFullYear() === start.getFullYear()) weeklyDriving += tDuration;

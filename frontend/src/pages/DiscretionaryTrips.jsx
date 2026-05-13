@@ -6,6 +6,7 @@ import { MapContainer, TileLayer, Polyline, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import api from '../lib/api';
+import { AppToast } from '../components/ui/AppModal';
 
 // Fix Leaflet icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -44,6 +45,8 @@ export default function DiscretionaryTrips() {
     const [loadingMap, setLoadingMap] = useState(false);
 
     const [drivers, setDrivers] = useState([]);
+    const [toast, setToast] = useState({ isOpen: false, type: 'info', message: '' });
+    const showToast = (msg, type = 'success') => setToast({ isOpen: true, type, message: msg });
 
     useEffect(() => {
         loadTrips();
@@ -130,23 +133,20 @@ export default function DiscretionaryTrips() {
             setNewMessage('');
             fetchMessages(); // This will trigger scroll bc emisor=agent
         } catch (e) {
-            alert("Error enviando mensaje");
+            showToast('Error enviando mensaje', 'danger');
         }
     };
 
     const handleStatusChange = async (newStatus) => {
         if (!selectedTrip) return;
-        if (!confirm(`¿Cambiar estado a ${newStatus}?`)) return;
-
         try {
             await api.put(`/viajes-discrecionales/${selectedTrip.id}`, { estado: newStatus });
             const updated = { ...selectedTrip, estado: newStatus };
             setSelectedTrip(updated);
             setTrips(trips.map(t => t.id === updated.id ? updated : t));
-
-            // Auto-send notification message to chat? Optional.
+            showToast(`Estado cambiado a: ${newStatus}`);
         } catch (e) {
-            alert("Error actualizando estado");
+            showToast('Error actualizando estado', 'danger');
         }
     };
 
@@ -182,12 +182,12 @@ export default function DiscretionaryTrips() {
     };
 
     return (
-        <div className="flex flex-col h-screen overflow-hidden bg-background-light dark:bg-background-dark transition-colors">
-            <Header title="Gestión de Viajes Discrecionales" />
+        <div className="flex flex-col min-h-screen bg-background-light dark:bg-background-dark transition-colors">
+            <Header title="Viajes Discrecionales" />
 
-            <main className="flex-1 p-4 flex gap-4 min-h-0">
+            <main className="flex-1 p-3 sm:p-4 flex flex-col lg:flex-row gap-4 overflow-auto pb-20">
                 {/* List Column */}
-                <div className="w-1/3 bg-white dark:bg-card-dark rounded-xl shadow border border-border-light dark:border-border-dark flex flex-col h-full overflow-hidden">
+                <div className="w-full lg:w-72 lg:shrink-0 bg-white dark:bg-card-dark rounded-xl shadow border border-border-light dark:border-border-dark flex flex-col max-h-64 lg:max-h-none overflow-hidden">
                     <div className="p-4 border-b border-border-light dark:border-border-dark flex-none">
                         <h2 className="font-bold text-lg">Solicitudes Recientes</h2>
                     </div>
@@ -218,11 +218,11 @@ export default function DiscretionaryTrips() {
 
                 {/* Details Column */}
                 {selectedTrip ? (
-                    <div className="flex-1 flex flex-col gap-4 overflow-hidden">
+                    <div className="flex-1 flex flex-col gap-4 min-w-0">
                         {/* Top: Map & Info */}
-                        <div className="flex-1 min-h-0 grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {/* Map */}
-                            <div className="bg-white dark:bg-card-dark rounded-xl shadow border border-border-light dark:border-border-dark overflow-hidden relative h-96">
+                            <div className="bg-white dark:bg-card-dark rounded-xl shadow border border-border-light dark:border-border-dark overflow-hidden relative h-64 md:h-96">
                                 <MapContainer
                                     key={selectedTrip ? selectedTrip.id : 'empty'}
                                     center={[40.4168, -3.7038]}
@@ -282,10 +282,10 @@ export default function DiscretionaryTrips() {
                                                         setSelectedTrip(trip);
                                                         setTrips(trips.map(t => t.id === trip.id ? trip : t));
 
-                                                        alert(`✅ Asignado automáticamente: ${conductor.nombre} ${conductor.apellidos}`);
+                                                        showToast(`✅ Asignado: ${conductor.nombre} ${conductor.apellidos}`);
                                                     } catch (e) {
                                                         const msg = e.response?.data?.error || "Error en asignación automática";
-                                                        alert(`❌ ${msg}`);
+                                                        showToast(`❌ ${msg}`, 'danger');
                                                     }
                                                 }}
                                                 className="text-xs bg-primary/10 text-primary px-2 py-1 rounded hover:bg-primary/20 font-bold flex items-center gap-1"
@@ -303,11 +303,11 @@ export default function DiscretionaryTrips() {
                                                     const updated = { ...selectedTrip, conductor_id: driverId };
                                                     setSelectedTrip(updated);
                                                     setTrips(trips.map(t => t.id === updated.id ? updated : t));
-                                                    alert("Conductor asignado correctamente");
+                                                    showToast('Conductor asignado correctamente');
                                                 } catch (err) {
                                                     console.error(err);
                                                     const msg = err.response?.data?.error || "Error al asignar conductor";
-                                                    alert(msg); // Show the specific tachograph error
+                                                    showToast(msg, 'danger');
                                                 }
                                             }}
                                         >
@@ -345,7 +345,7 @@ export default function DiscretionaryTrips() {
                         </div>
 
                         {/* Bottom: Chat */}
-                        <div className="h-80 bg-white dark:bg-card-dark rounded-xl shadow border border-border-light dark:border-border-dark flex flex-col overflow-hidden">
+                        <div className="h-64 lg:h-80 bg-white dark:bg-card-dark rounded-xl shadow border border-border-light dark:border-border-dark flex flex-col overflow-hidden">
                             <div className="p-3 bg-gray-50 dark:bg-slate-800 border-b border-border-light dark:border-border-dark flex items-center gap-2">
                                 <MessageSquare size={16} className="text-primary" />
                                 <h3 className="font-bold text-sm">Chat con Cliente</h3>
@@ -390,12 +390,13 @@ export default function DiscretionaryTrips() {
                         </div>
                     </div>
                 ) : (
-                    <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-slate-900 rounded-xl border border-dashed border-gray-300">
+                    <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-slate-900 rounded-xl border border-dashed border-gray-300 min-h-48 lg:min-h-0">
                         <p className="text-gray-400 font-medium">Selecciona una solicitud para ver detalles</p>
                     </div>
                 )}
             </main>
             <FooterNav />
+            <AppToast isOpen={toast.isOpen} type={toast.type} message={toast.message} onClose={() => setToast({...toast, isOpen: false})} />
         </div>
     );
 }

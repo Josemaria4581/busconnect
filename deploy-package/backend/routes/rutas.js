@@ -3,7 +3,7 @@ import { pool } from "../db.js";
 
 const router = Router();
 
-// GET /api/rutas?activo=1
+
 router.get("/", async (req, res, next) => {
   try {
     const { activo } = req.query;
@@ -14,7 +14,7 @@ router.get("/", async (req, res, next) => {
       params.push(Number(activo) ? 1 : 0);
     }
     const [rows] = await pool.query(sql, params);
-    // Parse JSON
+    
     const mapped = rows.map(r => ({ ...r, paradas: JSON.parse(r.paradas || '[]') }));
     res.json(mapped);
   } catch (error) {
@@ -22,7 +22,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// GET /api/rutas/:id
+
 router.get("/:id", async (req, res, next) => {
   try {
     const [rows] = await pool.query("SELECT * FROM rutas WHERE id = ?", [req.params.id]);
@@ -34,7 +34,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-// POST /api/rutas
+
 router.post("/", async (req, res, next) => {
   try {
     const {
@@ -69,7 +69,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-// PUT /api/rutas/:id
+
 router.put("/:id", async (req, res, next) => {
   try {
     const fields = ["codigo", "nombre", "descripcion", "origen", "destino", "distancia_km", "duracion_estimada_min", "activo", "precio", "paradas", "imagen"];
@@ -96,7 +96,7 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-// DELETE /api/rutas/:id
+
 router.delete("/:id", async (req, res, next) => {
   try {
     const [result] = await pool.query("DELETE FROM rutas WHERE id = ?", [req.params.id]);

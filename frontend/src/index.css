@@ -2,14 +2,9 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-
-@custom-variant dark (&:where(.dark, .dark *));
-
-
 @theme {
     --color-primary: #1173d4;
 
-    /* Legacy Colors Port - Suavizados para modo oscuro */
     --color-background-light: #f6f7f8;
     --color-background-dark: #1a2332;
 
@@ -27,7 +22,65 @@
     --font-display: "Work Sans", sans-serif;
 }
 
-/* Global Reset */
+/* Safe area support for iOS notch / home indicator */
+:root {
+    --sat: env(safe-area-inset-top);
+    --sar: env(safe-area-inset-right);
+    --sab: env(safe-area-inset-bottom);
+    --sal: env(safe-area-inset-left);
+}
+
 body {
     @apply font-display bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark;
+    /* Prevent horizontal overflow on mobile */
+    overflow-x: hidden;
+}
+
+/* Safe area bottom padding utility */
+.pb-safe {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+/* Ensure modals don't cause scroll issues on mobile */
+.modal-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+
+/* Better touch target sizes */
+button, a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Input zoom prevention on iOS (font-size >= 16px prevents auto-zoom) */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+select,
+textarea {
+    font-size: 16px;
+}
+
+@media (min-width: 640px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"],
+    select,
+    textarea {
+        font-size: inherit;
+    }
 }

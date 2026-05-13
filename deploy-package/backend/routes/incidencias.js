@@ -3,7 +3,7 @@ import { pool } from '../db.js';
 
 const router = express.Router();
 
-// GET /api/incidencias
+
 router.get('/', async (req, res, next) => {
     try {
         const [rows] = await pool.query(`
@@ -18,7 +18,7 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-// POST /api/incidencias
+
 router.post('/', async (req, res, next) => {
     try {
         const { titulo, descripcion, tipo, conductor_id } = req.body;

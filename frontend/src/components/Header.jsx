@@ -4,6 +4,7 @@ import { useNotifications } from '../context/NotificationContext';
 import { useNavigate } from 'react-router-dom';
 import Logo from './Logo';
 import ThemeSelector from './ThemeSelector';
+import AppModal from './ui/AppModal';
 import { Bell, Check, Trash2 } from 'lucide-react';
 
 export default function Header({ title = "Dashboard" }) {
@@ -11,20 +12,22 @@ export default function Header({ title = "Dashboard" }) {
     const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
     const navigate = useNavigate();
     const [showNotifs, setShowNotifs] = useState(false);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-    const handleLogout = () => {
-        if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-            logout();
-            navigate('/login');
-        }
+    const handleLogout = () => setShowLogoutModal(true);
+
+    const confirmLogout = () => {
+        setShowLogoutModal(false);
+        logout();
+        navigate('/login');
     };
 
     return (
         <header className="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-border-light dark:border-border-dark">
-            <div className="flex items-center justify-between p-4">
-                <div className="flex items-center gap-2">
-                    <Logo className="w-8 h-8" textSize="text-sm" />
-                    <h1 className="text-xl font-bold text-text-light dark:text-text-dark">{title}</h1>
+            <div className="flex items-center justify-between px-3 py-3 sm:px-4">
+                <div className="flex items-center gap-2 min-w-0">
+                    <Logo className="w-8 h-8 shrink-0" textSize="text-sm" />
+                    <h1 className="text-base sm:text-xl font-bold text-text-light dark:text-text-dark truncate">{title}</h1>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -93,6 +96,17 @@ export default function Header({ title = "Dashboard" }) {
             {showNotifs && (
                 <div className="fixed inset-0 z-[-1]" onClick={() => setShowNotifs(false)}></div>
             )}
+
+            <AppModal
+                isOpen={showLogoutModal}
+                type="warning"
+                title="Cerrar Sesión"
+                message="¿Estás seguro de que quieres cerrar sesión? Tendrás que volver a identificarte para acceder."
+                confirmText="Cerrar Sesión"
+                cancelText="Cancelar"
+                onConfirm={confirmLogout}
+                onCancel={() => setShowLogoutModal(false)}
+            />
         </header>
     );
 }

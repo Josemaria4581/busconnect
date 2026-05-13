@@ -8,8 +8,8 @@ export default function ClientFooter({ activeTab, onTabChange }) {
     ];
 
     return (
-        <footer className="sticky bottom-0 z-10 border-t bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark">
-            <nav className="flex justify-around p-2">
+        <footer className="sticky bottom-0 z-10 border-t bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark pb-safe">
+            <nav className="flex justify-around p-1 sm:p-2">
                 {navItems.map(({ id, icon: Icon, label }) => (
                     <button
                         key={id}
@@ -19,8 +19,8 @@ export default function ClientFooter({ activeTab, onTabChange }) {
                                 : 'text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary'
                             }`}
                     >
-                        <Icon className="w-6 h-6" />
-                        <span className="text-xs font-bold">{label}</span>
+                        <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                        <span className="text-[10px] sm:text-xs font-bold">{label}</span>
                     </button>
                 ))}
             </nav>

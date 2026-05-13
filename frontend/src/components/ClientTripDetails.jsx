@@ -6,6 +6,7 @@ import L from 'leaflet';
 import api from '../lib/api';
 import { useAuth } from '../context/AuthContext';
 import { jsPDF } from 'jspdf';
+import { AppToast } from './ui/AppModal';
 
 // Fix Leaflet icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -37,6 +38,8 @@ export default function ClientTripDetails({ trip, onBack }) {
     const [routeCoords, setRouteCoords] = useState([]);
     const [distanceKm, setDistanceKm] = useState(0);
     const messagesEndRef = useRef(null);
+    const [toast, setToast] = useState({ isOpen: false, type: 'info', message: '' });
+    const showToast = (msg, type = 'success') => setToast({ isOpen: true, type, message: msg });
 
     // Initial Load & Polling
     useEffect(() => {
@@ -112,7 +115,7 @@ export default function ClientTripDetails({ trip, onBack }) {
             setNewMessage('');
             fetchMessages();
         } catch (e) {
-            alert("Error al enviar mensaje");
+            showToast('Error al enviar mensaje', 'danger');
         }
     };
 
@@ -287,6 +290,7 @@ export default function ClientTripDetails({ trip, onBack }) {
                     </div>
                 </div>
             </div>
+            <AppToast isOpen={toast.isOpen} type={toast.type} message={toast.message} onClose={() => setToast({...toast, isOpen: false})} />
         </div>
     );
 }

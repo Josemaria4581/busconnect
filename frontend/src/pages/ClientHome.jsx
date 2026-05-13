@@ -5,6 +5,7 @@ import ClientFooter from '../components/ClientFooter';
 import RequestTrip from '../components/RequestTrip';
 import ClientTripDetails from '../components/ClientTripDetails';
 import api from '../lib/api';
+import jsPDF from 'jspdf';
 import { Map as MapIcon, Calendar, Clock, Download, XCircle, Star, Search, Filter } from 'lucide-react';
 
 export default function ClientHome() {
@@ -20,6 +21,7 @@ export default function ClientHome() {
     // View States
     const [isRequesting, setIsRequesting] = useState(false);
     const [selectedTrip, setSelectedTrip] = useState(null);
+    const [confirmModal, setConfirmModal] = useState({ isOpen: false, title: '', message: '', onConfirm: null, type: 'info' });
 
     // Load Data based on Tab
     useEffect(() => {
@@ -55,32 +57,87 @@ export default function ClientHome() {
     }, [activeTab, user]);
 
     // Ticket Actions
-    const buyTicket = async (route) => {
-        if (!confirm(`¿Comprar billete para ${route.nombre} por ${route.precio}€?`)) return;
+    const handleBuyTicketClick = (route) => {
+        setConfirmModal({
+            isOpen: true,
+            title: 'Confirmar Compra',
+            message: `¿Comprar un billete para la ruta ${route.nombre} por ${route.precio}€?`,
+            type: 'success',
+            onConfirm: () => executeBuyTicket(route)
+        });
+    };
 
+    const executeBuyTicket = async (route) => {
+        setConfirmModal({ ...confirmModal, isOpen: false });
         try {
-            const { data } = await api.post('/tickets', {
+            await api.post('/tickets', {
                 cliente_id: user.id,
                 ruta_id: route.id,
                 precio: route.precio,
-                fecha_viaje: new Date().toISOString() // Demo: immediate travel
+                fecha_viaje: new Date().toISOString()
             });
-            alert('¡Billete comprado!');
             setActiveTab('tickets');
-            // Refresh logic handled by useEffect when tab changes, or we can manually invoke
         } catch (e) {
-            alert('Error al comprar billete: ' + e.message);
+            console.error('Error al comprar billete: ' + e.message);
         }
     };
 
-    const cancelTicket = async (id) => {
-        if (!confirm('¿Cancelar este ticket?')) return;
+    const handleCancelTicketClick = (id) => {
+        setConfirmModal({
+            isOpen: true,
+            title: 'Cancelar Billete',
+            message: '¿Estás seguro de que deseas cancelar este billete? Esta acción no se puede deshacer.',
+            type: 'danger',
+            onConfirm: () => executeCancelTicket(id)
+        });
+    };
+
+    const executeCancelTicket = async (id) => {
+        setConfirmModal({ ...confirmModal, isOpen: false });
         try {
             await api.delete(`/tickets/${id}`);
             setTickets(tickets.map(t => t.id === id ? { ...t, estado: 'cancelado' } : t));
         } catch (e) {
-            alert('Error cancelando ticket');
+            console.error('Error cancelando ticket');
         }
+    };
+
+    const downloadTicket = (t) => {
+        const doc = new jsPDF();
+        
+        doc.setFillColor(30, 64, 175); // Blue primary
+        doc.rect(0, 0, 210, 40, 'F');
+        
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(22);
+        doc.setFont("helvetica", "bold");
+        doc.text("BusConnect - Billete de Viaje", 20, 25);
+        
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(16);
+        doc.text(`Ruta: ${t.ruta_nombre || 'Desconocida'}`, 20, 60);
+        
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "normal");
+        doc.text(`Origen: ${t.origen || ''}`, 20, 75);
+        doc.text(`Destino: ${t.destino || ''}`, 20, 85);
+        doc.text(`Pasajero: ${user?.name || 'Cliente'}`, 20, 95);
+        doc.text(`Fecha del viaje: ${new Date(t.fecha_viaje || t.fecha_compra).toLocaleDateString()}`, 20, 105);
+        
+        doc.setFont("helvetica", "bold");
+        doc.text(`PRECIO TOTAL: ${new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(t.precio || 0)}`, 20, 125);
+        
+        doc.setLineWidth(0.5);
+        doc.line(20, 135, 190, 135);
+        
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(100, 100, 100);
+        doc.text(`Referencia del Billete: #${t.id} - ${t.estado.toUpperCase()}`, 20, 145);
+        doc.text("Por favor, presente este billete al conductor al subir al autobus.", 20, 152);
+        
+        const fileName = t.ruta_nombre ? t.ruta_nombre.replace(/\s+/g, '_') : 'Billete';
+        doc.save(`Billete_${fileName}.pdf`);
     };
 
     // Render Helpers
@@ -95,29 +152,29 @@ export default function ClientHome() {
         );
         return (
             <div className="space-y-3">
-                {tickets.map((t) => (
-                    <div key={t.id} className="p-4 rounded-lg bg-white dark:bg-card-dark border border-border-light dark:border-border-dark shadow-sm">
+                {tickets.map((ticket) => (
+                    <div key={ticket.id} className="p-4 rounded-lg bg-white dark:bg-card-dark border border-border-light dark:border-border-dark shadow-sm">
                         <div className="flex items-start gap-4">
                             <div className="rounded-lg bg-primary/10 dark:bg-primary/20 p-2 text-primary">
                                 <span className="material-symbols-outlined font-bold text-xl">#</span>
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="font-bold truncate">{t.ruta_nombre || 'Ruta'}</p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{t.origen} → {t.destino}</p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Viaje: {new Date(t.fecha_viaje || t.fecha_compra).toLocaleDateString()}</p>
-                                <p className="text-sm mt-1"><span className="font-semibold">Precio:</span> {new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(t.precio || 0)}</p>
+                                <p className="font-bold truncate">{ticket.ruta_nombre || 'Ruta'}</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{ticket.origen} → {ticket.destino}</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">Viaje: {new Date(ticket.fecha_viaje || ticket.fecha_compra).toLocaleDateString()}</p>
+                                <p className="text-sm mt-1"><span className="font-semibold">Precio:</span> {new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(ticket.precio || 0)}</p>
                             </div>
                             <div className="flex flex-col items-end gap-2 shrink-0">
-                                {t.estado === 'cancelado' ? (
+                                {ticket.estado === 'cancelado' ? (
                                     <span className="text-xs font-bold text-red-600">Cancelado</span>
                                 ) : (
                                     <span className="text-xs font-bold text-green-600">Activo</span>
                                 )}
-                                <button className="px-3 py-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg text-sm flex items-center gap-1">
+                                <button onClick={() => downloadTicket(ticket)} className="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 transition-colors rounded-lg text-sm flex items-center gap-1">
                                     <Download size={14} />
                                 </button>
-                                {t.estado !== 'cancelado' && (
-                                    <button onClick={() => cancelTicket(t.id)} className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm flex items-center gap-1">
+                                {ticket.estado !== 'cancelado' && (
+                                    <button onClick={() => handleCancelTicketClick(ticket.id)} className="px-3 py-1.5 bg-red-600 hover:bg-red-700 transition-colors text-white rounded-lg text-sm flex items-center gap-1">
                                         <XCircle size={14} />
                                     </button>
                                 )}
@@ -139,31 +196,35 @@ export default function ClientHome() {
             </div>
 
             {loading ? <p>Cargando rutas...</p> : routes.map(route => (
-                <div key={route.id} className="bg-white dark:bg-card-dark rounded-xl shadow-sm overflow-hidden border border-border-light dark:border-border-dark">
-                    <div className="h-32 bg-gray-200 dark:bg-gray-700 relative">
-                        {route.imagen ? (
-                            <img src={route.imagen} alt={route.nombre} className="w-full h-full object-cover" />
-                        ) : (
-                            <div className="flex items-center justify-center h-full text-gray-400">
-                                <MapIcon size={40} />
+                <div key={route.id} className="bg-white dark:bg-card-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-5 flex flex-col gap-3">
+                    <div className="flex justify-between items-start">
+                        <div className="flex items-center gap-3">
+                            <div className="p-3 bg-primary/10 dark:bg-primary/20 rounded-lg text-primary">
+                                <MapIcon size={24} />
                             </div>
-                        )}
-                        <span className="absolute top-2 right-2 bg-white dark:bg-slate-900 px-2 py-1 rounded-lg text-xs font-bold shadow-sm">
+                            <div>
+                                <h3 className="font-bold text-lg leading-tight">{route.nombre}</h3>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">{route.origen} → {route.destino}</p>
+                            </div>
+                        </div>
+                        <span className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-3 py-1 rounded-full text-xs font-bold">
                             {route.distancia_km} km
                         </span>
                     </div>
-                    <div className="p-4">
-                        <h3 className="font-bold text-lg mb-1">{route.nombre}</h3>
-                        <p className="text-sm text-gray-500 mb-3">{route.descripcion}</p>
-                        <div className="flex justify-between items-center">
-                            <span className="font-bold text-primary text-lg">{route.precio}€</span>
-                            <button
-                                onClick={() => buyTicket(route)}
-                                className="px-4 py-2 bg-primary text-white rounded-lg font-bold text-sm shadow-md hover:bg-primary/90"
-                            >
-                                Comprar Billete
-                            </button>
+                    {route.descripcion && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{route.descripcion}</p>
+                    )}
+                    <div className="flex justify-between items-center mt-2 pt-4 border-t border-gray-100 dark:border-gray-800">
+                        <div className="flex flex-col">
+                            <span className="text-xs text-gray-500">Precio</span>
+                            <span className="font-bold text-primary text-xl">{route.precio}€</span>
                         </div>
+                        <button
+                            onClick={() => handleBuyTicketClick(route)}
+                            className="px-6 py-2.5 bg-primary text-white rounded-lg font-bold text-sm shadow-md hover:bg-primary/90 transition-transform active:scale-95"
+                        >
+                            Comprar Billete
+                        </button>
                     </div>
                 </div>
             ))}
@@ -264,6 +325,36 @@ export default function ClientHome() {
             </main>
 
             <ClientFooter activeTab={activeTab} onTabChange={setActiveTab} />
+
+            {/* Custom Confirm Modal */}
+            {confirmModal.isOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm p-6 transform scale-100 animate-in zoom-in-95 duration-200">
+                        <h2 className={`text-xl font-bold mb-2 ${confirmModal.type === 'danger' ? 'text-red-600' : 'text-gray-900 dark:text-white'}`}>
+                            {confirmModal.title}
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-300 mb-6 text-sm">
+                            {confirmModal.message}
+                        </p>
+                        <div className="flex gap-3 justify-end">
+                            <button
+                                onClick={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+                                className="px-4 py-2 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={confirmModal.onConfirm}
+                                className={`px-4 py-2 rounded-lg font-bold text-white transition-colors ${
+                                    confirmModal.type === 'danger' ? 'bg-red-600 hover:bg-red-700' : 'bg-primary hover:bg-primary/90'
+                                }`}
+                            >
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -48,11 +48,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ... (existing API routes)
+
 
 app.use("/tickets", ticketsRouter);
 
-// Endpoint para regenerar la base de datos (SOLO PARA PRUEBAS)
+
 import { seed } from "./seed.js";
 app.post("/api/seed", async (req, res) => {
   try {
@@ -63,7 +63,7 @@ app.post("/api/seed", async (req, res) => {
   }
 });
 
-// Servir archivos estáticos del frontend
+
 const frontendPath = path.join(__dirname, '../frontend/dist');
 app.use(express.static(frontendPath));
 
@@ -72,7 +72,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
-// Middleware de errores
+
 app.use((err, _req, res, _next) => {
   console.error(err);
   const status = err.status || 500;

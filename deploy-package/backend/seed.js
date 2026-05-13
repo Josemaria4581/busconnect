@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 export async function seed() {
   console.log('Starting seed...');
 
-  // 0. CLEANUP (Reverse order of dependencies)
+  
   console.log('Cleaning up...');
   await pool.query('PRAGMA foreign_keys = OFF');
   try { await pool.query('DELETE FROM mensajes_chat'); } catch (e) { }
@@ -19,7 +19,7 @@ export async function seed() {
   try { await pool.query('DELETE FROM autobuses'); } catch (e) { }
   await pool.query('PRAGMA foreign_keys = ON');
 
-  // 1. Buses
+  
   console.log('Seeding Buses...');
   const busImages = [
     "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=600&auto=format&fit=crop",
@@ -39,31 +39,31 @@ export async function seed() {
     );
   }
 
-  // 2. Conductores / Empleados / Admins
+  
   console.log('Seeding Persons...');
 
-  // Hash password '1234'
+  
   const hash = await bcrypt.hash('1234', 10);
 
-  // Users to create
+  
   const users = [
-    // Admins
+    
     { codigo: 'ADM-01', nombre: 'Marta', apellidos: 'Admin', email: 'marta@empresa.com', role: 'admin' },
     { codigo: 'ADM-02', nombre: 'Jose Maria', apellidos: 'Admin', email: 'josemaria@empresa.com', role: 'admin' },
 
-    // Drivers
+    
     { codigo: 'DRV-01', nombre: 'Juan', apellidos: 'Pérez', email: 'juan@empresa.com', role: 'driver', licencia: 'D+E' },
     { codigo: 'DRV-02', nombre: 'María', apellidos: 'López', email: 'maria@empresa.com', role: 'driver', licencia: 'D+E' },
     { codigo: 'DRV-03', nombre: 'Luis', apellidos: 'Gomez', email: 'luis@empresa.com', role: 'driver', licencia: 'D' },
 
-    // Mechanics
+    
     { codigo: 'MEC-01', nombre: 'Carlos', apellidos: 'Ruiz', email: 'carlos@empresa.com', role: 'mechanic' },
     { codigo: 'MEC-02', nombre: 'Ana', apellidos: 'Sánchez', email: 'ana@empresa.com', role: 'mechanic' },
 
-    // Staff
+    
     { codigo: 'STF-01', nombre: 'Laura', apellidos: 'García', email: 'laura@empresa.com', role: 'admin_staff' },
 
-    // Cleaner
+    
     { codigo: 'CLN-01', nombre: 'Pedro', apellidos: 'Ramírez', email: 'pedro@empresa.com', role: 'cleaner' }
   ];
 
@@ -75,11 +75,11 @@ export async function seed() {
     );
   }
 
-  // 3. Clientes
+  
   console.log('Seeding Clients...');
   await pool.query(`INSERT INTO clientes (nombre, email, password) VALUES ('Cliente Demo', 'cliente@demo.com', ?)`, [hash]);
 
-  // 4. Rutas
+  
   console.log('Seeding Routes...');
 
   const paradasMADBCN = JSON.stringify([
@@ -97,10 +97,10 @@ export async function seed() {
       ('R-MAD-VAL', 'Madrid - Valencia', 'Madrid', 'Valencia', 350, 210, 1, 32.00, ?, 'https://images.unsplash.com/photo-1552055615-565e3115793e?q=80&w=600')`,
     [paradasMADBCN, paradasMADVAL]);
 
-  // 5. Mantenimientos (alertas dashboard)
+  
   console.log('Seeding Maintenances...');
 
-  // Get first bus id
+  
   const [buses] = await pool.query('SELECT id FROM autobuses LIMIT 2');
   const bus1 = buses[0]?.id;
   const bus2 = buses[1]?.id;
@@ -111,19 +111,19 @@ export async function seed() {
         (?, 'aceite', '2024-01-10', 'Cambio de aceite necesario', 'pendiente')`, [bus1, bus2]);
   }
 
-  // 6. Viajes (Solicitudes pendientes e incidencias)
+  
   console.log('Seeding Trips...');
 
-  // Get first client
+  
   const [clients] = await pool.query('SELECT id FROM clientes LIMIT 1');
   const clientId = clients[0]?.id;
 
-  // Get first driver
+  
   const [drivers] = await pool.query("SELECT id FROM conductores WHERE rol='driver' LIMIT 1");
   const driverId = drivers[0]?.id;
 
   if (clientId) {
-    // Solicitud pendiente
+    
     await pool.query(`INSERT INTO viajes_discrecionales (
           cliente_id, origen, destino, fecha_salida, fecha_llegada, plazas, 
           precio_total, estado, observaciones
@@ -133,7 +133,7 @@ export async function seed() {
         )`, [clientId]);
 
     if (bus1 && driverId) {
-      // Viaje con incidencia (simulado via chat o estado)
+      
       await pool.query(`INSERT INTO viajes_discrecionales (
               cliente_id, origen, destino, fecha_salida, fecha_llegada, plazas, 
               precio_total, estado, conductor_id, autobus_id
@@ -144,9 +144,9 @@ export async function seed() {
     }
   }
 
-  // 7. Incidencias
+  
   console.log('Seeding Incidents...');
-  // Drivers should be available from previous fetch or fetch again
+  
   const [allDrivers] = await pool.query("SELECT id FROM conductores WHERE rol='driver'");
   if (allDrivers.length > 0) {
     const d1 = allDrivers[0].id;
@@ -164,9 +164,9 @@ export async function seed() {
   console.log('Seed completed.');
 }
 
-// ... existing code ...
 
-// Run if called directly (node seed.js)
+
+
 import { fileURLToPath } from 'url';
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   seed().catch(console.error);

@@ -7,6 +7,7 @@ import L from 'leaflet';
 import { ArrowLeft, MapPin, Calendar, Users, Calculator, Download, Send } from 'lucide-react';
 import api from '../lib/api';
 import { jsPDF } from 'jspdf';
+import { AppToast } from './ui/AppModal';
 
 // Fix Leaflet icon issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -138,13 +139,14 @@ export default function RequestTrip({ onBack, onTripCreated }) {
     };
 
     const { user } = useAuth();
-    const { addNotification } = useNotifications(); // Destructured addNotification
+    const { addNotification } = useNotifications();
+    const [toast, setToast] = useState({ isOpen: false, type: 'info', message: '' });
+    const showToast = (msg, type = 'success') => setToast({ isOpen: true, type, message: msg });
 
     const handleGenerate = async () => {
-        if (!dateStart || !dateEnd) return alert("Por favor selecciona fechas");
-
+        if (!dateStart || !dateEnd) { showToast('Por favor selecciona fechas', 'warning'); return; }
         if (new Date(dateEnd) < new Date(dateStart)) {
-            return alert("La fecha de llegada no puede ser anterior a la de salida.");
+            showToast('La fecha de llegada no puede ser anterior a la de salida.', 'warning'); return;
         }
 
         try {
@@ -169,10 +171,10 @@ export default function RequestTrip({ onBack, onTripCreated }) {
                 'success'
             );
 
-            alert('Solicitud enviada con éxito');
+            showToast('Solicitud enviada con éxito ✅');
             onTripCreated && onTripCreated();
         } catch (e) {
-            alert('Error al enviar solicitud: ' + (e.response?.data?.error || e.message));
+            showToast('Error al enviar: ' + (e.response?.data?.error || e.message), 'danger');
         }
     };
 
@@ -297,6 +299,7 @@ export default function RequestTrip({ onBack, onTripCreated }) {
                     </div>
                 </div>
             </div>
+            <AppToast isOpen={toast.isOpen} type={toast.type} message={toast.message} onClose={() => setToast({...toast, isOpen: false})} />
         </div>
     );
 }

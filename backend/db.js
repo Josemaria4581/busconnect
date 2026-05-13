@@ -8,7 +8,7 @@ dotenv.config();
 
 const DB_PATH = process.env.DB_PATH || 'database.sqlite';
 
-// Auto-init if not exists (simple check)
+
 const dbExists = fs.existsSync(DB_PATH);
 const db = new Database(DB_PATH);
 
@@ -29,7 +29,7 @@ if (!dbExists) {
   }
 }
 
-// Ensure default driver exists (Idempotent check)
+
 try {
   const check = db.prepare("SELECT count(*) as count FROM conductores WHERE email = 'conductor@busmanager.com'");
   if (check.get().count === 0) {
@@ -45,13 +45,13 @@ try {
   console.error("Error verificando conductor:", e);
 }
 
-// Wrapper to mimic mysql2/promise interface
+
 export const pool = {
   query: async (sql, params = []) => {
-    // Basic translation of ? to ? (better-sqlite3 supports ?, but let's be safe)
-    // Actually better-sqlite3 supports ? binding.
+    
+    
 
-    // Check if it's a SELECT
+    
     const isSelect = sql.trim().toUpperCase().startsWith('SELECT');
 
     try {
@@ -61,10 +61,10 @@ export const pool = {
 
       if (isSelect) {
         rows = stmt.all(...params);
-        return [rows, []]; // [regions, fields]
+        return [rows, []]; 
       } else {
         result = stmt.run(...params);
-        // Map result to mysql2 format: { insertId, affectedRows }
+        
         const meta = {
           insertId: result.lastInsertRowid,
           affectedRows: result.changes
@@ -85,5 +85,5 @@ export const pool = {
 };
 
 export async function ping() {
-  return true; // SQLite is local file, always "alive" if file access works
+  return true; 
 }

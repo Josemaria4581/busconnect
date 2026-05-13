@@ -3,7 +3,7 @@ import { pool } from "../db.js";
 
 const router = Router();
 
-// Get tickets for a user
+
 router.get("/", async (req, res, next) => {
     try {
         const { cliente_id } = req.query;
@@ -22,7 +22,7 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-// Buy a ticket
+
 router.post("/", async (req, res, next) => {
     try {
         const { cliente_id, ruta_id, fecha_viaje, precio } = req.body;
@@ -42,10 +42,10 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-// Cancel a ticket
+
 router.delete("/:id", async (req, res, next) => {
     try {
-        // Soft delete/cancel
+        
         const [result] = await pool.query("UPDATE tickets SET estado = 'cancelado' WHERE id = ?", [req.params.id]);
         if (result.affectedRows === 0) return res.status(404).json({ error: "Ticket no encontrado" });
         res.json({ message: "Ticket cancelado" });

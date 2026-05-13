@@ -6,7 +6,10 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "stress": "autocannon -c 100 -d 10 http://localhost:5000"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -19,6 +22,9 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "nodemon": "^3.0.3"
+    "autocannon": "^8.0.0",
+    "nodemon": "^3.0.3",
+    "supertest": "^7.2.2",
+    "vitest": "^4.1.6"
   }
 }

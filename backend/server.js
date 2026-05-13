@@ -1,8 +1,11 @@
-﻿import express from "express";
+import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { ping } from "./db.js";
+import { seed } from "./seed.js";
 import rutasRouter from "./routes/rutas.js";
 import autobusesRouter from "./routes/autobuses.js";
 import conductoresRouter from "./routes/conductores.js";
@@ -17,7 +20,12 @@ import ticketsRouter from "./routes/tickets.js";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: true, // Permite cualquier origen que haga la petición
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.originalUrl}`);
@@ -33,27 +41,21 @@ app.get("/health", async (_req, res, next) => {
   }
 });
 
-app.use("/rutas", rutasRouter);
-app.use("/autobuses", autobusesRouter);
-app.use("/conductores", conductoresRouter);
-app.use("/asignaciones", asignacionesRouter);
-app.use("/mantenimientos", mantenimientosRouter);
-app.use("/viajes-discrecionales", viajesRouter);
-app.use("/notificaciones", notificacionesRouter);
-app.use("/auth", authRoutes);
-app.use("/incidencias", incidenciasRouter);
-import path from 'path';
-import { fileURLToPath } from 'url';
+app.use("/api/rutas", rutasRouter);
+app.use("/api/autobuses", autobusesRouter);
+app.use("/api/conductores", conductoresRouter);
+app.use("/api/asignaciones", asignacionesRouter);
+app.use("/api/mantenimientos", mantenimientosRouter);
+app.use("/api/viajes-discrecionales", viajesRouter);
+app.use("/api/notificaciones", notificacionesRouter);
+app.use("/api/auth", authRoutes);
+app.use("/api/incidencias", incidenciasRouter);
+app.use("/api/tickets", ticketsRouter);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ... (existing API routes)
 
-app.use("/tickets", ticketsRouter);
-
-// Endpoint para regenerar la base de datos (SOLO PARA PRUEBAS)
-import { seed } from "./seed.js";
 app.post("/api/seed", async (req, res) => {
   try {
     await seed();
@@ -63,7 +65,7 @@ app.post("/api/seed", async (req, res) => {
   }
 });
 
-// Servir archivos estáticos del frontend
+
 const frontendPath = path.join(__dirname, '../frontend/dist');
 app.use(express.static(frontendPath));
 
@@ -72,7 +74,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
-// Middleware de errores
+
 app.use((err, _req, res, _next) => {
   console.error(err);
   const status = err.status || 500;
@@ -81,8 +83,12 @@ app.use((err, _req, res, _next) => {
   });
 });
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log('--- SERVER v2.1 STARTED ---');
-  console.log(`API escuchando en http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 4000;
+  app.listen(PORT, () => {
+    console.log('--- SERVER v2.1 STARTED ---');
+    console.log(`API escuchando en http://localhost:${PORT}`);
+  });
+}
+
+export default app;
